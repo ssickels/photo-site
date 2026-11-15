@@ -1,26 +1,124 @@
 # photo-site
 
-Static photography site for stevesickels.com, built from a Lightroom Classic
-**Hard Drive publish service** folder. Lightroom is the single source of truth;
-`build.py` turns the publish folder into `dist/<target>/`, which gets deployed to
-the TCH shared host.
+A static photography portfolio built straight from **Lightroom Classic**.
+You organize and keyword photos in Lightroom, click Publish, run one command,
+and get a fast, self-contained website you can host almost anywhere. There's no
+database, no CMS, no monthly portfolio-service fee, and no third-party requests
+(no fonts, analytics or CDNs).
 
-The workflow: drag photos into a theme collection in Lightroom, click Publish,
-then run `make deploy`.
+It was written to replace a PhotoShelter site ([stevesickels.com](https://stevesickels.com)),
+and should suit anyone leaving PhotoShelter, SmugMug, Squarespace, Wix or
+similar who already keeps their work organized in Lightroom.
 
-## Setup (in the OrbStack VM)
+**What you get**
 
-```bash
-sudo apt install libimage-exiftool-perl python3-venv
-```
+- **Themes:** one gallery per Lightroom publish collection (Landscapes,
+  Wildlife, …), including smart collections.
+- **Locations:** galleries built from your hierarchical place keywords
+  (`places > usa > maine > acadia`), with clickable breadcrumbs on every photo.
+- **Cover photos chosen in Lightroom** with a keyword (`covers > landscapes`).
+- Justified gallery rows; a photo page with arrow keys, swipe, pinch-zoom, Esc
+  to go back, and the title, caption, date, location and themes underneath.
+- Responsive images (WebP + JPEG at four widths), converted to sRGB, **GPS
+  always removed**, copyright kept.
+- Fast rebuilds: only new or changed photos are processed.
+- Light and dark mode, keyboard accessible, works without JavaScript.
+- A staging build that search engines are told to ignore.
 
-```bash
-make venv
-```
+## Is it for you? (assumptions)
 
-```bash
-make test
-```
+- **Lightroom Classic** with a **Hard Drive publish service**. Not the
+  cloud-based Lightroom, and not Capture One (the code reads standard
+  XMP/IPTC metadata from JPEGs, so other tools could be adapted).
+- For location pages: **hierarchical keywords** for places, all under one root
+  keyword (by default `places`). Without them you still get themes, just no
+  location pages.
+- Titles and captions in Lightroom's Title and Caption fields; they're shown
+  on photo pages.
+- Comfort running a few terminal commands (or asking an AI assistant to), with
+  Python 3.11+ and [exiftool](https://exiftool.org) installed.
+- Any host that serves static files. Deploy is via FTPS or rsync (see Status).
+
+## Quick start
+
+1. Install exiftool (`brew install exiftool` on a Mac;
+   `sudo apt install libimage-exiftool-perl` on Debian/Ubuntu), then:
+
+   ```bash
+   make venv
+   ```
+
+   ```bash
+   make test
+   ```
+
+2. Copy the example config and edit it: your name, site URL, the path to your
+   publish folder, theme order and location galleries.
+
+   ```bash
+   cp site.example.yaml site.yaml
+   ```
+
+3. Set up Lightroom as described below and publish a collection or two.
+
+4. See your place keywords with photo counts, to pick location galleries:
+
+   ```bash
+   make locations
+   ```
+
+5. Build and preview at http://localhost:8000:
+
+   ```bash
+   make build
+   ```
+
+   ```bash
+   make serve
+   ```
+
+6. Replace the logo, favicons and the About/Contact text with your own (see
+   "Making it yours").
+
+No photos yet? `make fixture-site` and `make serve-fixture` build a demo from
+the synthetic test images.
+
+## Lightroom setup
+
+**Publish Services → Hard Drive → Set Up:**
+
+- Export Location: a folder such as `~/PhotoSite/publish/` (set `paths.publish`
+  in `site.yaml` to match). The build only ever reads this folder.
+- File Naming: custom template `{Date (YYYYMMDD)}-{Filename}~{Copy Name}`
+  - The date prefix keeps names unique when the camera's counter wraps
+    (DSC09999 → DSC00001).
+  - `{Copy Name}` is empty for originals and "Copy 1", "Copy 2"… for virtual
+    copies, so a virtual copy isn't mistaken for its original.
+  - The `~` marks where the copy name starts. The copy name is left out of the
+    photo's web address unless the original (or another copy) is published too.
+- File Settings: JPEG, quality 90, **color space sRGB**.
+- Image Sizing: long edge 3000 px, don't enlarge.
+- Output Sharpening: Screen, Standard.
+- Metadata: **All Metadata**, with **Remove Person Info** and **Remove Location
+  Info** checked (removes GPS). Check **Write Keywords as Lightroom Hierarchy**.
+- Watermark: off.
+
+**Collections:** one publish collection per theme. Drag photos in and click
+Publish. A smart publish collection works too (for example, Keywords contains
+"b&w" for a Black & White theme). A photo in several collections is one photo
+shown in several themes.
+
+**Keywords:**
+
+- Places go under a top-level keyword (default `places`; set `location_root`).
+  `site.yaml` lists which places get a gallery and in what order.
+- Cover photos: a top-level keyword `covers`, with children named after a theme
+  or location gallery (`covers > landscapes`, `covers > scotland`), plus
+  `covers > home` for the home page. Tag one photo for each.
+- Both root keywords need **Include on Export** checked. Neither is shown on
+  the site.
+- Changing only a keyword setting doesn't mark photos for republishing in
+  Lightroom; use **Mark to Republish** on the collections afterwards.
 
 ## Commands
 
@@ -28,94 +126,72 @@ make test
 |---|---|
 | `make build` | Build `dist/production` from the publish folder |
 | `make staging` | Build `dist/staging` (noindex, disallow-all robots.txt) |
-| `make locations` | Print the place-keyword tree with photo counts (for picking `location_galleries`) |
-| `make sizes` | Derivative file sizes per width and format |
-| `make test` | Run the test suite against the synthetic fixture |
-| `make fixture-site` | Build the fixture site (no real photos needed) |
-| `make serve-fixture` | Serve the fixture site at http://localhost:8000 |
+| `make locations` | Print the place-keyword tree with photo counts |
+| `make sizes` | Image file sizes per width and format |
 | `make serve` | Serve `dist/production` at http://localhost:8000 |
+| `make test` | Run the test suite against the synthetic fixture |
+| `make fixture-site` / `make serve-fixture` | Build and serve a demo from the fixture |
 
 Paths can be overridden: `./build.py --publish /some/folder --out /tmp/out`.
+
+The build prints `warning:` lines for things to fix (a location gallery with no
+photos, a cover tag that matches nothing, a photo that isn't sRGB) and `info:`
+lines for things worth knowing (a collection that needs republishing).
+
+## Making it yours
+
+- **`site.yaml`:** site title, URLs, theme names/order/descriptions, location
+  galleries and their display names, image sizes and quality. Every option is
+  commented.
+- **Logo:** put your logo at `static/img/logo.png` (shown 53 px tall; make it
+  about 160 px tall for sharp screens), and optionally `logo-dark.png` for dark
+  mode. With no logo file, the site title is shown as text.
+  `tools/make_logos.py` is how this site made its own logo files; adapt it or
+  use any image editor.
+- **Favicons:** `static/favicon.svg`, `static/root/favicon.ico` and
+  `static/root/apple-touch-icon.png`.
+- **About and Contact:** Markdown files in `content/`. About appears in the
+  menu and Contact in the footer; any other `.md` file there becomes a page at
+  `/<name>/` that you can link to.
+- **Look:** one stylesheet, `static/css/site.css`; colors, fonts and spacing are
+  custom properties at the top. Templates are Jinja2, in `templates/`.
 
 ## How it works
 
 - **Themes** are the top-level folders of the publish folder, one per publish
-  collection. Names, order, slugs, descriptions, covers, sort and hiding are set
-  in `site.yaml`.
-- **Photo identity is the filename stem.** The same stem in several theme
-  folders is one photo in several themes. The newest copy is used, and an older
-  copy whose content differs is reported as an `info:` line, meaning a
-  collection still needs re-publishing.
-- **Locations** come from hierarchical keywords under `location_root`
-  (`Places|usa|maine|...`). `location_galleries` in `site.yaml` is a curated,
-  ordered, flat list of tree nodes at any depth. A gallery includes every photo
-  at that node or below it.
-- **Images:** for each photo, WebP and JPEG at 480/960/1600/2400 px wide. Sizes
-  are never upscaled; a source narrower than 2400 (such as a portrait) gets its
-  own width as the top size. Output is converted to sRGB (with a warning if the
-  source wasn't sRGB) and keeps only the EXIF Copyright tag; GPS is never written.
-  Filenames carry a hash of source + settings, so browsers can cache them forever.
-- **Incremental:**
-  - Metadata (exiftool, one batched call) and file hashes are cached by size and modified time.
-  - Derivatives are cached by source hash + settings.
-  - An unchanged rebuild doesn't run exiftool or decode any image.
-- **Pages:** Jinja2 templates in `templates/`, one stylesheet (`static/css/site.css`,
-  all colors, fonts and spacing as custom properties at the top), and two small
-  scripts: `gallery.js` lays out justified rows (without JS, a CSS flex layout
-  is the fallback) and `photo.js` handles ← → Esc, swipe and prefetching the
-  next photo. About and Contact are Markdown files in `content/`.
-- **Logo and favicons:** the header logo (`static/img/logo.png`, plus
-  `logo-dark.png` for dark mode) and the favicons (`static/favicon.svg`,
-  `static/root/favicon.ico`, `static/root/apple-touch-icon.png`) are generated
-  from the artwork in `logos/` by `tools/make_logos.py`. Re-run it if the logo
-  changes; the generated files are what the site uses.
-- **Covers:** the photo on each theme and location card (and the home page) is
-  the one tagged `Covers|<name>` in Lightroom, e.g. `Covers|Landscapes`,
-  `Covers|Scotland`, `Covers|Home`; otherwise the newest. A `cover:` in
-  `site.yaml` overrides the keyword.
-- The publish folder is **read-only** to this code.
-
-`.cache/` holds the derivatives and caches; `dist/` holds the builds. Both are
-git-ignored and can be deleted at any time; deleting `.cache/` means the next
-build re-renders every image.
-
-## Lightroom setup
-
-**Publish Services → Hard Drive → Set Up:**
-
-- Export Location: `~/PhotoSite/publish/` on the Mac (seen from the VM as
-  `/mnt/mac/Users/ssickels/PhotoSite/publish/`)
-- File Naming: custom template `{Date (YYYYMMDD)}-{Filename}~{Copy Name}`
-  - `{Copy Name}` is empty for originals and "Copy 1", "Copy 2"… for virtual
-    copies. Without it, a virtual copy published to a different theme than its
-    original would have the same name and be merged with the original.
-  - The `~` marks where the copy name starts. The copy name is left out of the
-    photo's URL unless the original (or another copy) is published too.
-  - Sony filenames start over after DSC09999, hence the date prefix.
-- File Settings: JPEG, quality 90, **color space sRGB**
-- Image Sizing: Long Edge 3000 px, don't enlarge
-- Output Sharpening: Screen, Standard
-- Metadata: **All Metadata**, with **Remove Person Info** and **Remove
-  Location Info** checked (this removes GPS). Check **Write Keywords as
-  Lightroom Hierarchy**.
-- Watermark: off
-
-**Keywords:** the place hierarchy sits under a top-level keyword `places`, and
-cover tags under `covers` (see Covers above). Both root keywords need
-**Include on Export** checked. Neither is shown on the site. Changing only a
-keyword setting doesn't mark photos for republishing; use **Mark to Republish**
-on the collections afterwards.
-
-**Collections:** one publish collection per theme (Landscapes, Wildlife, Plants
-and Flowers, The Built Environment). Drag photos in and click Publish. Location
-pages need no collections; they're built from keywords. A theme can also be a
-*smart* publish collection (e.g. Label = Green AND Keyword contains
-"landscape").
+  collection.
+- **Photo identity is the filename.** The same file in several theme folders is
+  one photo in several themes. If two copies differ (in the image or in the
+  metadata the site uses), the newer is used and an `info:` line says a
+  collection needs republishing.
+- **Locations:** a gallery includes every photo at that place or anywhere below
+  it. Every place in the hierarchy also gets a page (so breadcrumbs always
+  link), but only the galleries listed in `site.yaml` appear on the Locations
+  page.
+- **Images:** WebP and JPEG at 480/960/1600/2400 px wide, never upscaled. Only
+  the copyright tag is kept in the files. Filenames include a hash, so browsers
+  can cache them forever.
+- **Incremental:** metadata (one batched exiftool call) and images are cached
+  in `.cache/`. An unchanged rebuild takes well under a second. `.cache/` and
+  `dist/` can be deleted at any time.
+- **JavaScript** (small, optional): justified gallery rows, the photo page's
+  keys/swipe/zoom/prefetch, and a header that hides while you scroll down.
 
 ## Status
 
-- [x] Phase 1: skeleton, config, fixture, metadata, image pipeline + cache, tests
-- [x] Phase 2: templates, pages, CSS, justified gallery, keyboard/swipe
-- [x] Phase 3: real-data dry run (sizes → q80, location galleries, `~` copy
-  names), plus logo/favicons, cover keywords, linked breadcrumbs, six themes
-- [ ] Phase 4: `.htaccess`, FTPS (lftp) deploy with rsync as an option, staging, Lighthouse
+Working: everything above, tested against a real Lightroom library of about
+340 published photos and a synthetic fixture (`make test`).
+
+Not built yet:
+
+- `make deploy`: FTPS upload via `lftp mirror --reverse --delete`, with
+  rsync-over-SSH as an option (`deploy:` in `site.yaml`). Credentials will come
+  from `~/.netrc` or environment variables, never from the repo. Until then,
+  upload `dist/production/` with any FTP client.
+- An `.htaccess` with caching headers for Apache hosts.
+
+## License
+
+The code is MIT licensed (see [LICENSE](LICENSE)). The logo, favicons, the text
+in `content/` and all photographs are © Steve Sickels and not covered by that
+license.

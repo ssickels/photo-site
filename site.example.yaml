@@ -1,0 +1,101 @@
+# Example site configuration: copy to site.yaml and edit.
+# Paths may be overridden with CLI flags
+# (--publish, --out). Never put passwords in this file.
+
+site:
+  title: Jane Doe Photography
+  author: Jane Doe
+  base_url: https://example.com               # production; staging overrides below
+  blog_url:                                   # optional: adds a "Blog" menu link
+  # Used in derivative files when a photo has no copyright of its own.
+  default_copyright: "© Jane Doe. All rights reserved."
+
+paths:
+  publish: ~/PhotoSite/publish   # READ-ONLY input: the Lightroom Hard Drive publish folder
+  output: dist          # builds go to dist/<target>/
+  cache: .cache         # image derivatives + metadata cache
+
+# ---------------------------------------------------------------- themes
+# Keys are the publish-folder names (= Lightroom publish collection names).
+# Key order here is the display order; folders not listed come after,
+# alphabetically. Every field is optional.
+#   name:        display name (default: folder name)
+#   slug:        URL segment (default: derived from name)
+#   description: one short line shown on the themes index
+#   cover:       photo filename stem for the theme card. Usually easier: tag the
+#                photo in Lightroom with Covers|<theme name> (see cover_root below).
+#                Default: the newest photo.
+#   sort:        date_desc (default) | date_asc | filename | [list of stems]
+#   hidden:      true to leave the theme (and photos only in it) off the site
+themes:
+  Landscapes:
+    description: Mountains, coasts and weather
+  Wildlife: {}
+  Street:
+    hidden: true          # work in progress: not on the site yet
+
+home:
+  hero:          # photo stem; or tag a photo Covers|Home; default: newest photo
+
+# Cover photos chosen in Lightroom: a keyword "Covers" (with Include on Export
+# checked) and children named after a theme or location gallery, e.g.
+# Covers|Landscapes, Covers|Scotland, Covers|New York City, Covers|Home.
+# Tag one photo with each; the photo must be in that theme or gallery. A
+# `cover:` in this file wins over the keyword. Never shown on the site.
+cover_root: Covers
+
+# ------------------------------------------------------------- locations
+# Root keyword your place hierarchy sits under in Lightroom (case-insensitive).
+# It must have "Include on Export" checked; it's never shown on the site.
+location_root: Places
+
+# Curated, ordered, flat list of location galleries. `node` is a full keyword
+# path ("europe|united kingdom|scotland") or a unique trailing part ("scotland").
+# Optional: name, slug, cover (photo stem). Run `./build.py locations` to see
+# the tree with counts. A gallery with no published photos yet is left out
+# (with a warning), so this can list places you haven't published.
+location_galleries:
+  - node: usa|maine
+  - {node: usa|new york|nyc, name: "New York City"}
+  - node: europe|scotland
+  - node: iceland
+
+# Lightroom keywords are lowercase; they're shown Title Cased. Fix the words
+# that Title Case gets wrong here (keyword -> display text).
+location_labels:
+  usa: USA
+  uk: UK
+  nyc: NYC
+
+# Also generate a page for every place in the hierarchy, so every breadcrumb
+# on photo and gallery pages is a link. These pages aren't listed on the
+# Locations index; that shows only location_galleries above.
+location_tree: true
+
+# ---------------------------------------------------------------- images
+images:
+  widths: [480, 960, 1600, 2400]
+  jpeg_quality: 80
+  webp_quality: 80
+  webp_method: 5        # 0-6, higher = smaller/slower
+  workers: 0            # 0 = one per CPU core
+  # What fills a tile while its image loads: color (the photo's average
+  # color), blur (a ~150-byte blurred preview inlined in the page), or none.
+  placeholder: color
+
+# ---------------------------------------------------------------- deploy
+# method: ftps (lftp mirror --reverse --delete) or rsync (over SSH).
+# Credentials come from ~/.netrc (chmod 600) or env vars, never from here:
+#   PHOTOSITE_<TARGET>_USER / PHOTOSITE_<TARGET>_PASSWORD
+deploy:
+  method: ftps
+  staging:
+    base_url: https://staging.example.com
+    host: ftp.example.com
+    remote_dir: /          # FTP account's home = the staging docroot
+    noindex: true
+  production:
+    base_url: https://example.com
+    host: ftp.example.com
+    remote_dir: /
+    noindex: false

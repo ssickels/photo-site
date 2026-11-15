@@ -18,12 +18,17 @@
 <body class="{% block body_class %}{% endblock %}">
 <a class="skip" href="#main">Skip to content</a>
 <header class="site-header">
+  {% set lg = logo() %}
+  {% if lg %}
   <a class="site-title" href="/">
     <picture>
-      <source srcset="{{ static('img/logo-dark.png') }}" media="(prefers-color-scheme: dark)">
-      <img src="{{ static('img/logo.png') }}" width="278" height="53" alt="{{ site.title }}">
+      {% if lg.dark %}<source srcset="{{ lg.dark }}" media="(prefers-color-scheme: dark)">{% endif %}
+      <img src="{{ lg.src }}" width="{{ lg.width }}" height="{{ lg.height }}" alt="{{ site.title }}">
     </picture>
   </a>
+  {% else %}
+  <a class="site-title text" href="/">{{ site.title }}</a>
+  {% endif %}
   <nav aria-label="Main">
     <ul>
     {% for label, href, key in nav() %}

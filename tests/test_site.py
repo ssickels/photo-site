@@ -236,3 +236,17 @@ def test_every_page_loads_header_script(site):
     root = site.output_dir / "production"
     for f in [root / "index.html", root / "themes" / "index.html", root / "landscapes" / "index.html"]:
         assert '/static/js/header.' in f.read_text()
+
+
+def test_text_title_when_there_is_no_logo(publish_dir, tmp_path, monkeypatch):
+    import shutil
+    import photosite.render as render
+    root = tmp_path / "root"
+    shutil.copytree(render.ROOT / "templates", root / "templates")
+    shutil.copytree(render.ROOT / "static", root / "static",
+                    ignore=shutil.ignore_patterns("logo.png", "logo-dark.png"))
+    monkeypatch.setattr(render, "ROOT", root)
+    cfg = load_config(TEST_CONFIG, publish=publish_dir, output=tmp_path / "dist", cache=tmp_path / "cache")
+    build(cfg, "production")
+    html = (tmp_path / "dist" / "production" / "index.html").read_text()
+    assert '<a class="site-title text" href="/">' in html and "/static/img/logo" not in html

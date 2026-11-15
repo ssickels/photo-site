@@ -29,6 +29,7 @@ ROOT = Path(__file__).resolve().parent.parent
 ROW_H_MOBILE, ROW_H_DESKTOP, ROW_GROW = 150, 260, 1.6
 # How much of the viewport height the photo-page image may use (site.css).
 PHOTO_CHROME = "6.8rem"
+LOGO_H = 53                  # px; matches --logo-h in site.css
 EAGER_ASPECT = 6.0      # tiles until the summed aspect ratio passes this load eagerly
 
 
@@ -56,12 +57,14 @@ class Site:
         self.config, self.catalog, self.records = config, catalog, records
         self.target = config.target(target)
         self.static_urls: dict[str, str] = {}
+        self.logo: dict | None = None               # set by copy_static if static/img/logo.png exists
         self.env = Environment(loader=FileSystemLoader(str(ROOT / "templates")),
                                autoescape=select_autoescape(["html", "xml"]),
                                undefined=StrictUndefined, trim_blocks=True, lstrip_blocks=True)
         self.env.globals.update(site=config.site, target=self.target, static=self.static,
                                 img=self.img, nav=self.nav_items, fmt_date=fmt_date,
-                                placeholder=config.images.placeholder)
+                                placeholder=config.images.placeholder,
+                                logo=lambda: self.logo)
         self.pages: list[tuple[str, Path]] = []     # (url, file) for sitemap
         self.canonical_urls: list[str] = []
 
@@ -158,6 +161,13 @@ class Site:
             dest.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(f, dest)
             self.static_urls[rel] = "/" + dest_rel
+        if "img/logo.png" in self.static_urls:          # optional; text title otherwise
+            from PIL import Image
+            with Image.open(src_root / "img/logo.png") as im:
+                w, h = im.size
+            self.logo = {"src": self.static_urls["img/logo.png"],
+                         "dark": self.static_urls.get("img/logo-dark.png"),
+                         "width": round(LOGO_H * w / h), "height": LOGO_H}
 
     def context_crumbs(self, g) -> list[tuple[str, str | None]]:
         """(name, url) for each ancestor of a location gallery's node."""
