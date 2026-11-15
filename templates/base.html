@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}{% if title is defined and title %}{{ title }} · {% endif %}{{ site.title }}{% endblock %}</title>
+{% if target.noindex %}<meta name="robots" content="noindex, nofollow">
+{% endif %}
+<link rel="canonical" href="{{ canonical }}">
+<meta name="color-scheme" content="light dark">
+<link rel="stylesheet" href="{{ static('css/site.css') }}">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="{{ static('favicon.svg') }}" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+{% block head %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <a class="site-title" href="/">
+    <picture>
+      <source srcset="{{ static('img/logo-dark.png') }}" media="(prefers-color-scheme: dark)">
+      <img src="{{ static('img/logo.png') }}" width="278" height="53" alt="{{ site.title }}">
+    </picture>
+  </a>
+  <nav aria-label="Main">
+    <ul>
+    {% for label, href, key in nav() %}
+      <li><a href="{{ href }}"{% if key == section %} aria-current="page"{% endif %}>{{ label }}</a></li>
+    {% endfor %}
+    </ul>
+  </nav>
+</header>
+<main id="main">
+{% block main %}{% endblock %}
+</main>
+{% block footer %}
+<footer class="site-footer">
+  <span>© {{ site.author | default(site.title) }}</span>
+  <a href="/contact/">Contact</a>
+</footer>
+{% endblock %}
+{% block scripts %}{% endblock %}
+</body>
+</html>

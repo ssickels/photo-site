@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% from "_macros.html" import picture, ph %}
+{% block body_class %}photo-page{% endblock %}
+{% block head %}
+<meta property="og:title" content="{{ title }}">
+<meta property="og:image" content="{{ img.og }}">
+{% if next_url %}<link rel="prefetch" href="{{ next_url }}">{% endif %}
+{% endblock %}
+{% block main %}
+<div class="stage">
+<figure class="photo" data-up="{{ ctx.url }}" data-id="{{ photo.id }}"{% if prev_url %} data-prev="{{ prev_url }}"{% endif %}{% if next_url %} data-next="{{ next_url }}" data-next-srcset="{{ next_img.webp_srcset }}" data-next-sizes="{{ next_img.sizes }}"{% endif %}>
+  <div class="photo-frame" style="--ar:{{ '%.4f' % img.ar }};{{ ph(img) }}">
+    {{ picture(img, loading="eager", priority="high") }}
+  </div>
+</figure>
+{% if prev_url %}<a class="nav nav-prev" href="{{ prev_url }}" rel="prev" aria-label="Previous photo"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></span></a>{% endif %}
+{% if next_url %}<a class="nav nav-next" href="{{ next_url }}" rel="next" aria-label="Next photo"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></span></a>{% endif %}
+<a class="close" href="{{ ctx.url }}#{{ photo.id }}" aria-label="Back to {{ ctx.name }}" title="Back to {{ ctx.name }} (Esc)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></a>
+</div>
+<div class="photo-info">
+  <p class="context"><a href="{{ ctx.url }}#{{ photo.id }}">{{ ctx.name }}</a> · {{ index + 1 }} of {{ total }}</p>
+  {% if photo.meta.title %}<h1>{{ photo.meta.title }}</h1>{% endif %}
+  {% if photo.meta.caption %}<p class="caption">{{ photo.meta.caption }}</p>{% endif %}
+  <dl class="facts">
+    {% if fmt_date(photo) %}<dt>Date</dt><dd><time datetime="{{ photo.date.strftime('%Y-%m-%d') }}">{{ fmt_date(photo) }}</time></dd>{% endif %}
+    {% for trail in crumbs %}
+    <dt>{{ "Location" if loop.first else "Also" }}</dt>
+    <dd class="crumbs">{% for name, href in trail %}{% if href %}<a href="{{ href }}">{{ name }}</a>{% else %}<span>{{ name }}</span>{% endif %}{% if not loop.last %}<span class="sep" aria-hidden="true"> › </span>{% endif %}{% endfor %}</dd>
+    {% endfor %}
+    <dt>{{ "Theme" if themes | length == 1 else "Themes" }}</dt>
+    <dd>{% for name, href in themes %}<a href="{{ href }}">{{ name }}</a>{% if not loop.last %}, {% endif %}{% endfor %}</dd>
+  </dl>
+</div>
+{% endblock %}
+{% block scripts %}<script src="{{ static('js/photo.js') }}" defer></script>{% endblock %}

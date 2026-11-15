@@ -1,0 +1,123 @@
+# Site configuration. Paths may be overridden with CLI flags
+# (--publish, --out). Never put passwords in this file.
+
+site:
+  title: Steve Sickels Photography
+  author: Steve Sickels
+  base_url: https://stevesickels.com          # production; staging overrides below
+  blog_url: https://stevesickelsphotography.com
+  # Used in derivative files when a photo has no copyright of its own.
+  default_copyright: "© Steve Sickels. All rights reserved."
+
+paths:
+  publish: /mnt/mac/Users/ssickels/PhotoSite/publish   # READ-ONLY input
+  output: dist          # builds go to dist/<target>/
+  cache: .cache         # image derivatives + metadata cache
+
+# ---------------------------------------------------------------- themes
+# Keys are the publish-folder names (= Lightroom publish collection names).
+# Key order here is the display order; folders not listed come after,
+# alphabetically. Every field is optional.
+#   name:        display name (default: folder name)
+#   slug:        URL segment (default: derived from name)
+#   description: one short line shown on the themes index
+#   cover:       photo filename stem for the theme card. Usually easier: tag the
+#                photo in Lightroom with Covers|<theme name> (see cover_root below).
+#                Default: the newest photo.
+#   sort:        date_desc (default) | date_asc | filename | [list of stems]
+#   hidden:      true to leave the theme (and photos only in it) off the site
+themes:
+  Landscapes: {}
+  Wildlife: {}
+  Plants and Flowers: {}
+  The Built Environment:
+    description: Personal work
+  Music: {}
+  Architectural Photography:
+    description: Commissioned work for clients
+
+home:
+  hero:          # photo stem; or tag a photo Covers|Home; default: newest photo
+
+# Cover photos chosen in Lightroom: a keyword "Covers" (with Include on Export
+# checked) and children named after a theme or location gallery, e.g.
+# Covers|Landscapes, Covers|Scotland, Covers|New York City, Covers|Home.
+# Tag one photo with each; the photo must be in that theme or gallery. A
+# `cover:` in this file wins over the keyword. Never shown on the site.
+cover_root: Covers
+
+# ------------------------------------------------------------- locations
+# Root keyword your place hierarchy sits under in Lightroom (case-insensitive).
+# It must have "Include on Export" checked; it's never shown on the site.
+location_root: Places
+
+# Curated, ordered, flat list of location galleries. `node` is a full keyword
+# path ("europe|united kingdom|scotland") or a unique trailing part ("scotland").
+# Optional: name, slug, cover (photo stem). Run `./build.py locations` to see
+# the tree with counts. A gallery with no published photos yet is left out
+# (with a warning), so this can list places you haven't published.
+location_galleries:
+  - {node: southern africa, name: "Africa – Southern"}
+  - node: usa|california
+  - node: canada
+  - node: usa|colorado
+  - node: usa|delaware
+  - node: europe
+  - node: usa|florida
+  - node: europe|iceland
+  - node: europe|italy
+  - node: usa|maine
+  - node: usa|maryland
+  - node: morocco
+  - node: usa|new mexico
+  - node: usa|new york
+  - {node: usa|new york|nyc, name: "New York City"}
+  - {node: usa|new york|rochester, name: "Rochester, New York"}
+  - node: europe|norway
+  - node: usa|oregon
+  - node: europe|uk|scotland
+  - node: south america
+  - node: usa|tennessee
+  - node: usa
+  - node: usa|virginia
+  - node: usa|washington d.c.
+
+# Lightroom keywords are lowercase; they're shown Title Cased. Fix the words
+# that Title Case gets wrong here (keyword -> display text).
+location_labels:
+  usa: USA
+  uk: UK
+  nyc: NYC
+
+# Also generate a page for every place in the hierarchy, so every breadcrumb
+# on photo and gallery pages is a link. These pages aren't listed on the
+# Locations index; that shows only location_galleries above.
+location_tree: true
+
+# ---------------------------------------------------------------- images
+images:
+  widths: [480, 960, 1600, 2400]
+  jpeg_quality: 80
+  webp_quality: 80
+  webp_method: 5        # 0-6, higher = smaller/slower
+  workers: 0            # 0 = one per CPU core
+  # What fills a tile while its image loads: color (the photo's average
+  # color), blur (a ~150-byte blurred preview inlined in the page), or none.
+  placeholder: color
+
+# ---------------------------------------------------------------- deploy
+# method: ftps (lftp mirror --reverse --delete) or rsync (over SSH).
+# Credentials come from ~/.netrc (chmod 600) or env vars, never from here:
+#   PHOTOSITE_<TARGET>_USER / PHOTOSITE_<TARGET>_PASSWORD
+deploy:
+  method: ftps
+  staging:
+    base_url: https://new.stevesickels.com
+    host: belle.tchmachines.com
+    remote_dir: /          # FTP account's home = the staging docroot
+    noindex: true
+  production:
+    base_url: https://stevesickels.com
+    host: belle.tchmachines.com
+    remote_dir: /
+    noindex: false

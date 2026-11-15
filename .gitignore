@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+.DS_Store
+
+# generated
+dist/
+.cache/
+tests/fixtures/
+
+# local overrides / secrets — never commit
+site.local.yaml
+.netrc
+.env
+lightroom-recovery.md

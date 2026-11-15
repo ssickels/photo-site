@@ -1,0 +1,25 @@
+# Test config: points at the generated fixture folder.
+site:
+  title: Test Site
+  base_url: https://example.test
+  default_copyright: "© Test"
+paths:
+  publish: fixtures/publish
+  output: ../dist/fixture
+  content: ../content
+  cache: ../.cache
+themes:
+  Landscapes: {}
+  Wildlife: {}
+  Plants and Flowers: {}
+  The Built Environment: {}
+location_root: Places
+location_galleries:
+  - node: europe
+  - node: europe|united kingdom|scotland
+  - node: maine
+  - node: usa|maine|mt desert island
+    name: Acadia / Mount Desert Island
+  - node: usa|georgia
+location_labels:
+  usa: USA

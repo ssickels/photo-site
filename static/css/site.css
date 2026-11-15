@@ -1,0 +1,211 @@
+/* ==========================================================================
+   Settings: change the look here.
+   ========================================================================== */
+:root {
+  --bg: #fafaf8;
+  --fg: #1d1d1b;
+  --muted: #6e6e69;
+  --line: #e4e4df;
+  --link: var(--fg);
+  --focus: #2f6fd0;
+  --tile-bg: #ecece7;
+
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --font-size: 1rem;
+  --title-size: 1.6rem;
+  --small: 0.875rem;
+
+  --gutter: clamp(0.75rem, 2.5vw, 2rem);   /* page side padding */
+  --gap: 6px;                              /* space between gallery tiles */
+  --row-h: 260px;                          /* target gallery row height */
+  --header-h: 3.5rem;
+  --logo-h: 53px;                          /* header logo height */
+  --photo-chrome: 6.8rem;                   /* viewport height not used by the photo */
+  --ctl-bg: #111;                          /* photo arrows and close button */
+  --ctl-fg: #fff;
+  --text-w: 40rem;
+}
+@media (max-width: 40em) {
+  :root { --row-h: 150px; --gap: 4px; --photo-chrome: 5rem; --logo-h: 41px; }
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #121211;
+    --fg: #e6e6e1;
+    --muted: #9a9a93;
+    --line: #2a2a27;
+    --focus: #7aa7ff;
+    --tile-bg: #1e1e1c;
+  }
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font: var(--font-size)/1.55 var(--font);
+  display: flex; flex-direction: column; min-height: 100vh;
+}
+main { flex: 1; padding: 0 var(--gutter); }
+img { display: block; max-width: 100%; height: auto; }
+a { color: var(--link); text-decoration-color: var(--line); text-underline-offset: 0.2em; }
+a:hover { text-decoration-color: currentColor; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 2px; }
+h1, h2, h3 { font-weight: 500; line-height: 1.25; }
+
+.skip { position: absolute; left: -999px; top: 0; background: var(--bg); padding: 0.5rem 1rem; z-index: 10; }
+.skip:focus { left: var(--gutter); }
+
+/* ==========================================================================
+   Header / footer
+   ========================================================================== */
+.site-header {
+  display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between;
+  gap: 0.25rem 1.5rem; min-height: var(--header-h);
+  padding: 0.9rem var(--gutter) 0.6rem;
+}
+.site-title { display: block; line-height: 0; margin-right: auto; }
+.site-title img { height: var(--logo-h); width: auto; }
+.site-header ul { display: flex; flex-wrap: wrap; gap: 0 1.25rem; margin: 0; padding: 0; list-style: none; }
+.site-header nav a { text-decoration: none; color: var(--muted); font-size: 0.95rem; }
+.site-header nav a:hover, .site-header nav a[aria-current] { color: var(--fg); }
+.site-footer {
+  display: flex; gap: 1.5rem; justify-content: center;
+  padding: 2.5rem var(--gutter) 2rem; color: var(--muted); font-size: var(--small);
+}
+.site-footer a { color: inherit; }
+
+.page-title { font-size: var(--title-size); margin: 1.25rem 0 1rem; }
+.context { margin: 1.25rem 0 -0.75rem; color: var(--muted); font-size: var(--small); }
+.description { color: var(--muted); max-width: var(--text-w); margin-top: -0.5rem; }
+
+/* ==========================================================================
+   Home
+   ========================================================================== */
+.hero { margin: 0 auto; max-width: calc((100vh - 9rem) * var(--ar)); background: var(--tile-bg); }
+.hero img { width: 100%; }
+.theme-links {
+  display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline;
+  gap: 0.5rem 2rem; margin: 1.5rem 0 0;
+}
+/* A quiet caption (also a link to the Themes page): small caps, muted, set off by a rule */
+.theme-links .label {
+  color: var(--muted); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase;
+  padding-right: 2rem; border-right: 1px solid var(--line);
+}
+.theme-links ul {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem 2rem;
+  list-style: none; padding: 0; margin: 0;
+}
+.theme-links a.label { font-size: 0.75rem; }
+.theme-links a.label:hover { color: var(--fg); text-decoration: none; }
+@media (max-width: 40em) {
+  .theme-links { flex-direction: column; align-items: center; }
+  .theme-links .label { padding-right: 0; border-right: 0; }
+}
+.theme-links a { text-decoration: none; font-size: 1.05rem; }
+.theme-links a:hover { text-decoration: underline; }
+
+/* ==========================================================================
+   Cards (themes index, locations index)
+   ========================================================================== */
+.cards {
+  display: grid; gap: 2rem var(--gutter);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
+  list-style: none; padding: 0; margin: 0;
+}
+.card a { display: block; text-decoration: none; }
+.card-img { aspect-ratio: 3 / 2; overflow: hidden; background: var(--tile-bg); }
+.card-img img { width: 100%; height: 100%; object-fit: cover; transition: opacity .2s; }
+.card a:hover img { opacity: 0.88; }
+.card-name { display: block; margin-top: 0.6rem; font-size: 1.1rem; }
+.card-meta { display: block; color: var(--muted); font-size: var(--small); }
+
+/* ==========================================================================
+   Gallery grid, no cropping. gallery.js sets each tile's width so rows are
+   justified (class "js" on .grid). Without JS this flex layout is the
+   fallback: tiles grow in proportion to their aspect ratio, so a row keeps
+   one height, and max-width stops a lone tile from stretching too far.
+   ========================================================================== */
+.grid {
+  display: flex; flex-wrap: wrap; gap: var(--gap);
+  list-style: none; padding: 0; margin: 0;
+}
+.grid::after { content: ""; flex-grow: 1e4; }
+.grid.js::after { display: none; }
+.grid li {
+  flex: var(--ar) 1 calc(var(--ar) * var(--row-h));
+  background-color: var(--tile-bg);
+  max-width: min(100%, calc(var(--ar) * var(--row-h) * 1.6));
+  scroll-margin-top: 30vh;
+}
+.grid a, .grid picture { display: block; }
+.grid img { width: 100%; aspect-ratio: var(--ar); object-fit: cover; }
+.grid a:hover img { opacity: 0.9; }
+.grid li:target { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+/* ==========================================================================
+   Photo page
+   ========================================================================== */
+/* The stage has a fixed height on wide screens, so the arrows and the close
+   button stay put from photo to photo whatever the aspect ratio. */
+.stage {
+  position: relative;
+  height: calc(100vh - var(--photo-chrome));
+  display: flex; align-items: center; justify-content: center;
+}
+.photo { margin: 0; width: 100%; }
+.photo-frame {
+  margin: 0 auto;
+  width: min(100%, calc((100vh - var(--photo-chrome)) * var(--ar)));
+  aspect-ratio: var(--ar);
+}
+.photo-frame img { width: 100%; height: 100%; }
+.stage .nav {
+  position: absolute; top: 0; bottom: 0; width: 30%;
+  display: flex; align-items: center; padding: 0 0.75rem;
+  -webkit-tap-highlight-color: transparent;
+}
+.nav-prev { left: 0; justify-content: flex-start; }
+.nav-next { right: 0; justify-content: flex-end; }
+.stage .nav span, .stage .close {
+  display: grid; place-items: center; border-radius: 50%;
+  background: var(--ctl-bg); color: var(--ctl-fg);
+  opacity: 0; transition: opacity 0.15s;
+}
+.stage .nav span { width: 3rem; height: 3rem; }
+.stage .close { position: absolute; top: 0.75rem; right: 0.75rem; width: 2.5rem; height: 2.5rem; }
+.stage svg { width: 55%; height: 55%; fill: none; stroke: currentColor; stroke-width: 2.25; stroke-linecap: round; stroke-linejoin: round; }
+.stage:hover .nav span, .stage:hover .close { opacity: 0.55; }
+.stage .nav:hover span, .stage .close:hover, .stage a:focus-visible span, .stage .close:focus-visible { opacity: 0.9; }
+@media (hover: none) {                    /* touch: no hover, so always show them faintly */
+  .stage .nav span, .stage .close { opacity: 0.45; }
+}
+@media (max-width: 40em) {                /* phones: the stage hugs the photo */
+  .stage { height: auto; }
+  .stage .nav { padding: 0 0.4rem; }
+  .stage .nav span { width: 2.5rem; height: 2.5rem; }
+  .stage .close { top: 0.4rem; right: 0.4rem; }
+}
+.context { margin: 0 0 0.5rem; font-size: var(--small); color: var(--muted); }
+.context a { color: inherit; }
+.photo-info { max-width: var(--text-w); margin: 1.5rem auto 0; }
+.photo-info h1 { font-size: 1.35rem; margin: 0 0 0.4rem; }
+.caption { margin: 0 0 1rem; }
+.facts { display: grid; grid-template-columns: max-content 1fr; gap: 0.2rem 1rem; margin: 0; font-size: var(--small); }
+.facts dt { color: var(--muted); }
+.facts dd { margin: 0; }
+.crumbs .sep { color: var(--muted); }
+.crumbs span:not(.sep) { color: var(--muted); }
+
+/* ==========================================================================
+   Text pages
+   ========================================================================== */
+.prose { max-width: var(--text-w); margin: 0 auto; }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }

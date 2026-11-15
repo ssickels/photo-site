@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% from "_macros.html" import picture, ph %}
+{% block main %}
+<header class="gallery-header">
+  {% if context %}<p class="context crumbs">{% for name, href in context %}{% if href %}<a href="{{ href }}">{{ name }}</a>{% else %}<span>{{ name }}</span>{% endif %}{% if not loop.last %}<span class="sep" aria-hidden="true"> › </span>{% endif %}{% endfor %}</p>{% endif %}
+  <h1 class="page-title">{{ title }}</h1>
+  {% if description %}<p class="description">{{ description }}</p>{% endif %}
+</header>
+<ul class="grid">
+{% for t in tiles %}
+  <li id="{{ t.photo.id }}" style="--ar:{{ '%.4f' % t.img.ar }};{{ ph(t.img) }}">
+    <a href="{{ t.url }}">{{ picture(t.img, loading="eager" if t.eager else "lazy") }}</a>
+  </li>
+{% endfor %}
+</ul>
+{% endblock %}
+{% block scripts %}<script src="{{ static('js/gallery.js') }}" defer></script>{% endblock %}

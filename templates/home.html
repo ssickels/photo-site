@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% from "_macros.html" import picture, ph %}
+{% block title %}{{ site.title }}{% endblock %}
+{% block body_class %}home{% endblock %}
+{% block head %}{% if hero_img %}<meta property="og:image" content="{{ hero_img.og }}">{% endif %}{% endblock %}
+{% block main %}
+{% if hero_img %}
+<figure class="hero" style="{{ ph(hero_img) }}--ar:{{ '%.4f' % hero_img.ar }}">
+  <a href="/{{ hero.canonical_theme.slug }}/{{ hero.id }}/">{{ picture(hero_img, loading="eager", priority="high") }}</a>
+</figure>
+{% endif %}
+<nav class="theme-links" aria-labelledby="theme-links-label">
+  <a class="label" id="theme-links-label" href="/themes/">Themes</a>
+  <ul>
+  {% for t, href in themes %}
+    <li><a href="{{ href }}">{{ t.name }}</a></li>
+  {% endfor %}
+  </ul>
+</nav>
+{% endblock %}

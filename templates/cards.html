@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% from "_macros.html" import picture, ph %}
+{% block main %}
+<h1 class="page-title">{{ title }}</h1>
+<ul class="cards">
+{% for c in cards %}
+  <li class="card">
+    <a href="{{ c.url }}">
+      {% if c.img %}<div class="card-img" style="{{ ph(c.img) }}">{{ picture(c.img, loading="eager" if loop.index <= 3 else "lazy") }}</div>{% endif %}
+      <span class="card-name">{{ c.name }}</span>
+      <span class="card-meta">{% if c.subtitle %}{{ c.subtitle }} · {% endif %}{{ c.count }} photo{{ "" if c.count == 1 else "s" }}</span>
+    </a>
+  </li>
+{% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,12 @@
+{# One responsive <picture>. im = Site.img(...) #}
+{% macro picture(im, loading="lazy", priority=None, cls="") -%}
+<picture>
+<source type="image/webp" srcset="{{ im.webp_srcset }}" sizes="{{ im.sizes }}">
+<img src="{{ im.src }}" srcset="{{ im.jpeg_srcset }}" sizes="{{ im.sizes }}" width="{{ im.w }}" height="{{ im.h }}" alt="{{ im.alt }}" loading="{{ loading }}" decoding="async"{% if priority %} fetchpriority="{{ priority }}"{% endif %}{% if cls %} class="{{ cls }}"{% endif %}>
+</picture>
+{%- endmacro %}
+
+{# Background shown while an image loads #}
+{% macro ph(im) -%}
+{%- if placeholder == "color" %}background-color:{{ im.color }};{% elif placeholder == "blur" %}background:{{ im.color }} url({{ im.lqip }}) center/cover;{% endif -%}
+{%- endmacro %}
