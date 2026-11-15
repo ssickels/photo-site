@@ -94,6 +94,17 @@ location_labels:
 # Locations index; that shows only location_galleries above.
 location_tree: true
 
+# --------------------------------------------------------------- contact
+# A mail form on /contact/ (above it: the text of content/contact.md). Needs
+# PHP on the host. The recipient and the Turnstile secret are private: they go
+# in site.local.yaml (gitignored) under `contact:` as mail_to and
+# turnstile_secret, never here.
+contact:
+  form: true
+  mail_from: noreply@stevesickels.com    # this domain's SPF must list the web server
+  subject: Photography contact
+  turnstile_sitekey: 0x4AAAAAAGAxgbC-k8YzImeK   # public; same widget as stevessite.com
+
 # ---------------------------------------------------------------- images
 images:
   widths: [480, 960, 1600, 2400]

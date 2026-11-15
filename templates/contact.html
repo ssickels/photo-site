@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block main %}
+<article class="prose">
+  <h1 class="page-title">{{ title }}</h1>
+  {{ body | safe }}
+
+  <div id="form-status" class="form-status" role="status" aria-live="polite" hidden></div>
+
+  {# Posts normally without JavaScript (send.php redirects back with ?status=);
+     contact.js sends it with fetch instead, so the text stays put on an error. #}
+  <form class="contact-form" action="/contact/send.php" method="post">
+    <div class="hp" aria-hidden="true">
+      <label>Leave this empty <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+    </div>
+
+    <label for="name">Name</label>
+    <input type="text" id="name" name="name" autocomplete="name" maxlength="120" required>
+
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" autocomplete="email" required>
+
+    <label for="message">Message</label>
+    <textarea id="message" name="message" rows="8" maxlength="5000" required></textarea>
+
+    {% if contact.turnstile_sitekey %}
+    <div class="cf-turnstile captcha" data-sitekey="{{ contact.turnstile_sitekey }}"
+         data-action="{{ turnstile_action }}" data-theme="auto" data-size="flexible"></div>
+    {% endif %}
+
+    <button type="submit">Send message</button>
+  </form>
+</article>
+{% endblock %}
+{% block scripts %}
+<script src="{{ static('js/contact.js') }}" defer></script>
+{% if contact.turnstile_sitekey %}
+{# The site's one third-party request, on this page only. #}
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+{% endif %}
+{% endblock %}

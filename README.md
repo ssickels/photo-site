@@ -4,7 +4,8 @@ A static photography portfolio built straight from **Lightroom Classic**.
 You organize and keyword photos in Lightroom, click Publish, run one command,
 and get a fast, self-contained website you can host almost anywhere. There's no
 database, no CMS, no monthly portfolio-service fee, and no third-party requests
-(no fonts, analytics or CDNs).
+(no fonts, analytics or CDNs; the one optional exception is a captcha on the
+contact form).
 
 It was written to replace a PhotoShelter site ([stevesickels.com](https://stevesickels.com)),
 and should suit anyone leaving PhotoShelter, SmugMug, Squarespace, Wix or
@@ -23,6 +24,9 @@ similar who already keeps their work organized in Lightroom.
   always removed**, copyright kept.
 - Fast rebuilds: only new or changed photos are processed.
 - Light and dark mode, keyboard accessible, works without JavaScript.
+- A contact form that emails you (a small PHP script), with spam protection:
+  a hidden trap field, a rate limit, and optionally a Cloudflare Turnstile
+  captcha.
 - A staging build that search engines are told to ignore.
 
 ## Is it for you? (assumptions)
@@ -38,6 +42,7 @@ similar who already keeps their work organized in Lightroom.
 - Comfort running a few terminal commands (or asking an AI assistant to), with
   Python 3.11+ and [exiftool](https://exiftool.org) installed.
 - Any host that serves static files. Deploy is via FTPS or rsync (see Status).
+  The contact form also needs PHP, which most shared hosting has.
 
 ## Quick start
 
@@ -153,8 +158,42 @@ lines for things worth knowing (a collection that needs republishing).
 - **About and Contact:** Markdown files in `content/`. About appears in the
   menu and Contact in the footer; any other `.md` file there becomes a page at
   `/<name>/` that you can link to.
+- **Contact form:** see below.
 - **Look:** one stylesheet, `static/css/site.css`; colors, fonts and spacing are
   custom properties at the top. Templates are Jinja2, in `templates/`.
+
+## Contact form
+
+With `contact.form: true` in `site.yaml`, `/contact/` shows the text of
+`content/contact.md` followed by a form (name, email, message). The build puts
+a small PHP handler next to it (`contact/send.php`, from `php/`), which emails
+the message to you with the visitor's address as Reply-To.
+
+- **Private settings** go in `site.local.yaml` (gitignored), never in
+  `site.yaml`; the build refuses to run if they're in the wrong file:
+
+  ```yaml
+  contact:
+    mail_to: you@example.com
+    turnstile_secret: "0x4AAAA..."      # only if you use Turnstile
+  ```
+
+  The build writes them into `contact/config.php`, a PHP file that only
+  returns its settings, so requesting it in a browser shows nothing.
+- **Delivery:** `mail_from` should be on your own domain, and that domain's SPF
+  DNS record must list your web server, or messages may go to spam. If your
+  email is hosted elsewhere (Fastmail, Google, …), add the server to the
+  existing record, e.g. `v=spf1 include:spf.messagingengine.com a:your-server.example ?all`.
+  On cPanel, also set Email Routing for the domain to **Remote Mail Exchanger**.
+- **Spam protection:** a hidden field that only bots fill in, a check that the
+  form wasn't filled faster than a person could, and at most 5 messages per
+  hour from one IP address. Optionally, a free
+  [Cloudflare Turnstile](https://www.cloudflare.com/products/turnstile/) widget:
+  put its site key in `site.yaml` and its secret in `site.local.yaml`, and add
+  your domain to the widget's allowed hostnames.
+- Staging messages have `[staging]` at the start of the subject.
+- Without JavaScript the form still posts, and the visitor is sent back to the
+  page.
 
 ## How it works
 
@@ -180,7 +219,8 @@ lines for things worth knowing (a collection that needs republishing).
 ## Status
 
 Working: everything above, tested against a real Lightroom library of about
-340 published photos and a synthetic fixture (`make test`).
+400 published photos and a synthetic fixture (`make test`; the contact form's
+PHP is tested too when `php` is installed).
 
 Not built yet:
 

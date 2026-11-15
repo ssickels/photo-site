@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import os
+import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -35,6 +36,22 @@ class ImageSettings:
             raise ConfigError("images.placeholder must be color, blur or none")
 
 
+# Contact settings that must never be in site.yaml (which is committed):
+# they go in the private file instead.
+PRIVATE_CONTACT_KEYS = ("mail_to", "turnstile_secret")
+EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+
+
+@dataclass
+class ContactSettings:
+    form: bool = False               # build a mail form on /contact/ (needs PHP on the host)
+    mail_from: str = ""              # sender; a domain whose SPF lists the web server
+    subject: str = "Website contact"
+    turnstile_sitekey: str = ""      # public Cloudflare Turnstile site key ('' = no captcha)
+    mail_to: str = ""                # private: from the private file
+    turnstile_secret: str = ""       # private: from the private file
+
+
 @dataclass
 class Config:
     root: Path                      # project directory (where site.yaml lives)
@@ -52,6 +69,7 @@ class Config:
     images: ImageSettings
     deploy: dict
     content_dir: Path = None
+    contact: ContactSettings = field(default_factory=ContactSettings)
 
     def target(self, name: str) -> dict:
         """Per-target settings: base_url and noindex (staging defaults to noindex)."""
@@ -102,6 +120,8 @@ def load_config(path: str | os.PathLike = "site.yaml", *, publish=None,
 
     labels = {str(k).lower(): str(v) for k, v in (data.get("location_labels") or {}).items()}
 
+    contact = _load_contact(root, data.get("contact") or {})
+
     return Config(
         root=root,
         site=data.get("site") or {},
@@ -118,4 +138,41 @@ def load_config(path: str | os.PathLike = "site.yaml", *, publish=None,
         images=images,
         deploy=data.get("deploy") or {},
         content_dir=_resolve(root, paths.get("content", "content")),
+        contact=contact,
     )
+
+
+def _load_contact(root: Path, public: dict) -> ContactSettings:
+    """contact: from site.yaml, plus mail_to / turnstile_secret from the private
+    file (default site.local.yaml next to site.yaml, gitignored)."""
+    if not isinstance(public, dict):
+        raise ConfigError("`contact` must be a mapping")
+    leaked = [k for k in PRIVATE_CONTACT_KEYS if public.get(k)]
+    if leaked:
+        raise ConfigError(f"contact.{leaked[0]} belongs in the private file "
+                          "(site.local.yaml), not in site.yaml")
+    private_path = _resolve(root, public.get("private_file") or "site.local.yaml")
+    private = {}
+    if private_path.exists():
+        private = (yaml.safe_load(private_path.read_text()) or {}).get("contact") or {}
+        if not isinstance(private, dict):
+            raise ConfigError(f"`contact` in {private_path} must be a mapping")
+    merged = {k: v for k, v in public.items() if k != "private_file"}
+    merged.update({k: private[k] for k in PRIVATE_CONTACT_KEYS if private.get(k)})
+    known = set(ContactSettings.__dataclass_fields__)
+    unknown = set(merged) - known
+    if unknown:
+        raise ConfigError(f"unknown contact settings: {', '.join(sorted(unknown))}")
+    c = ContactSettings(**{k: (v if k == "form" else str(v or "").strip())
+                           for k, v in merged.items()})
+    c.form = bool(c.form)
+    if not c.form:
+        return c
+    if not EMAIL_RE.match(c.mail_to):
+        raise ConfigError(f"contact.form is on but there's no valid mail_to in {private_path}")
+    if not EMAIL_RE.match(c.mail_from):
+        raise ConfigError("contact.form is on but contact.mail_from isn't an email address")
+    if bool(c.turnstile_sitekey) != bool(c.turnstile_secret):
+        raise ConfigError("Turnstile needs both contact.turnstile_sitekey (site.yaml) and "
+                          f"turnstile_secret ({private_path}), or neither")
+    return c

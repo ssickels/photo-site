@@ -11,6 +11,7 @@ URL layout (all root-relative):
 from __future__ import annotations
 
 import hashlib
+import json
 import shutil
 from dataclasses import dataclass
 from pathlib import Path
@@ -30,6 +31,7 @@ ROW_H_MOBILE, ROW_H_DESKTOP, ROW_GROW = 150, 260, 1.6
 # How much of the viewport height the photo-page image may use (site.css).
 PHOTO_CHROME = "6.8rem"
 LOGO_H = 53                  # px; matches --logo-h in site.css
+TURNSTILE_ACTION = "photography-contact"   # tells this form's tokens apart on a shared widget
 EAGER_ASPECT = 6.0      # tiles until the summed aspect ratio passes this load eagerly
 
 
@@ -64,7 +66,7 @@ class Site:
         self.env.globals.update(site=config.site, target=self.target, static=self.static,
                                 img=self.img, nav=self.nav_items, fmt_date=fmt_date,
                                 placeholder=config.images.placeholder,
-                                logo=lambda: self.logo)
+                                logo=lambda: self.logo, turnstile_action=TURNSTILE_ACTION)
         self.pages: list[tuple[str, Path]] = []     # (url, file) for sitemap
         self.canonical_urls: list[str] = []
 
@@ -214,8 +216,12 @@ class Site:
 
         for md in sorted(self.config.content_dir.glob("*.md")) if self.config.content_dir.exists() else []:
             title, body = render_markdown(md.read_text(encoding="utf-8"))
-            self.write(out, f"/{md.stem}/", "page.html", section=md.stem,
-                       title=title or md.stem.title(), body=body)
+            form = md.stem == "contact" and self.config.contact.form
+            self.write(out, f"/{md.stem}/", "contact.html" if form else "page.html",
+                       section=md.stem, title=title or md.stem.title(), body=body,
+                       contact=self.config.contact)
+            if form:
+                self.write_contact_php(out / "contact")
 
         self.write(out, "/404.html", "404.html", section="", title="Not found", in_sitemap=False)
         (out / "robots.txt").write_text(self.robots())
@@ -241,6 +247,31 @@ class Site:
                    prev_url=f"{ctx.url}{prev.id}/" if prev else None,
                    next_url=f"{ctx.url}{nxt.id}/" if nxt else None, next_img=nxt_img,
                    crumbs=crumbs, themes=[(t.name, self.theme_url(t)) for t in p.themes])
+
+    def write_contact_php(self, dest: Path) -> None:
+        """The form handler and its settings, next to /contact/index.html."""
+        c, t = self.config.contact, self.target
+        for name in ("contact-lib.php", "send.php"):
+            shutil.copy2(ROOT / "php" / name, dest / name)
+        settings = {
+            "mail_to": c.mail_to,
+            "mail_from": c.mail_from,
+            "subject_tag": (f"[{t['name']}] " if t["name"] != "production" else "") + c.subject,
+            "return_page": "/contact/",
+            "turnstile_secret": c.turnstile_secret,
+            "action": TURNSTILE_ACTION,
+            "rl_prefix": "photosite_contact_",
+            "rl_max": 5,
+            "rl_window": 3600,
+            "min_fill_ms": 3000,
+            "site_label": t["base_url"] or t["name"],
+        }
+        # A PHP file that only returns an array: requesting it shows nothing,
+        # so the secret and address can't be read over the web.
+        blob = json.dumps(settings).replace("\\", "\\\\").replace("'", "\\'")
+        (dest / "config.php").write_text(
+            "<?php\n// Written by the build from site.yaml and the private site.local.yaml.\n"
+            f"return json_decode('{blob}', true);\n", encoding="utf-8")
 
     # ----------------------------------------------------------- extras
     def robots(self) -> str:

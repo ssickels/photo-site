@@ -83,6 +83,21 @@ images:
   # color), blur (a ~150-byte blurred preview inlined in the page), or none.
   placeholder: color
 
+# --------------------------------------------------------------- contact
+# A mail form on /contact/, under the text of content/contact.md. Needs PHP on
+# the host (most shared hosting has it). The recipient and the Turnstile
+# secret are private; put them in site.local.yaml (gitignored), never here:
+#   contact:
+#     mail_to: you@example.com
+#     turnstile_secret: "0x4AAAA..."
+contact:
+  form: false
+  mail_from: noreply@example.com      # your domain; its SPF record must list the web server
+  subject: Website contact
+  # Optional captcha: a free Cloudflare Turnstile widget's (public) site key.
+  # It's the site's only third-party request, and only on the contact page.
+  turnstile_sitekey: ""
+
 # ---------------------------------------------------------------- deploy
 # method: ftps (lftp mirror --reverse --delete) or rsync (over SSH).
 # Credentials come from ~/.netrc (chmod 600) or env vars, never from here:
