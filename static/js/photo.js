@@ -39,12 +39,28 @@
     if (e.touches.length !== 1) { x0 = null; return; }
     x0 = e.touches[0].clientX; y0 = e.touches[0].clientY;
   }, { passive: true });
+  var vv = window.visualViewport;
+  function zoomed() { return vv && vv.scale > 1.05; }
   stage.addEventListener("touchend", function (e) {
     if (x0 === null) return;
+    if (zoomed()) { x0 = null; return; }          // pinch-zoomed in: one-finger drag pans, not swipes
     var dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
     x0 = null;
     if (Math.abs(dx) > 50 && Math.abs(dx) > 1.5 * Math.abs(dy)) go(dx < 0 ? d.next : d.prev);
   }, { passive: true });
+
+  // Pinch-zoom: browsers don't fetch a sharper file when you zoom in, so ask
+  // for one sized to the zoomed width (the largest is 2400 px).
+  if (vv) {
+    var wanted = 0;
+    vv.addEventListener("resize", function () {
+      if (vv.scale < 1.3) return;
+      var w = Math.round(fig.getBoundingClientRect().width * vv.scale);
+      if (w <= wanted) return;
+      wanted = w;
+      fig.querySelectorAll("source, img").forEach(function (el) { el.sizes = w + "px"; });
+    });
+  }
 
   // Prefetch the next photo at the size this screen would pick.
   function prefetch() {

@@ -20,13 +20,14 @@
   --row-h: 260px;                          /* target gallery row height */
   --header-h: 3.5rem;
   --logo-h: 53px;                          /* header logo height */
+  --logo-h-compact: 36px;                  /* ...after scrolling down */
   --photo-chrome: 6.8rem;                   /* viewport height not used by the photo */
   --ctl-bg: #111;                          /* photo arrows and close button */
   --ctl-fg: #fff;
   --text-w: 40rem;
 }
 @media (max-width: 40em) {
-  :root { --row-h: 150px; --gap: 4px; --photo-chrome: 5rem; --logo-h: 41px; }
+  :root { --row-h: 150px; --gap: 4px; --photo-chrome: 5rem; --logo-h: 41px; --logo-h-compact: 30px; }
 }
 @media (prefers-color-scheme: dark) {
   :root {
@@ -70,7 +71,25 @@ h1, h2, h3 { font-weight: 500; line-height: 1.25; }
   padding: 0.9rem var(--gutter) 0.6rem;
 }
 .site-title { display: block; line-height: 0; margin-right: auto; }
-.site-title img { height: var(--logo-h); width: auto; }
+.site-title img { height: var(--logo-h); width: auto; transition: height 0.2s ease; }
+
+/* With JS (header.js): the header floats over the page, slides away while
+   scrolling down, comes back smaller on any scroll up. */
+.js-header body { padding-top: var(--header-space, 0); }
+.js-header .site-header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 20;
+  background: var(--bg); transition: transform 0.25s ease, padding 0.2s ease, box-shadow 0.2s ease;
+}
+.js-header .site-header.compact {
+  padding-top: 0.5rem; padding-bottom: 0.4rem; min-height: 0;
+  box-shadow: 0 1px 0 var(--line);
+}
+.js-header .site-header.compact .site-title img { height: var(--logo-h-compact); }
+.js-header .site-header.hidden { transform: translateY(-100%); box-shadow: none; }
+.grid li, [id] { scroll-margin-top: 5rem; }      /* #anchors land below a revealed header */
+@media (prefers-reduced-motion: reduce) {
+  .js-header .site-header, .site-title img { transition: none; }
+}
 .site-header ul { display: flex; flex-wrap: wrap; gap: 0 1.25rem; margin: 0; padding: 0; list-style: none; }
 .site-header nav a { text-decoration: none; color: var(--muted); font-size: 0.95rem; }
 .site-header nav a:hover, .site-header nav a[aria-current] { color: var(--fg); }

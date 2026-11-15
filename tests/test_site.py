@@ -230,3 +230,9 @@ def test_location_gallery_context_crumbs_link_to_ancestors(site):
     ctx = html.split('<p class="context crumbs">', 1)[1].split("</p>", 1)[0]
     assert '<a href="/locations/europe/">Europe</a>' in ctx
     assert "<span>United Kingdom</span>" in ctx           # no gallery for it in the test config
+
+
+def test_every_page_loads_header_script(site):
+    root = site.output_dir / "production"
+    for f in [root / "index.html", root / "themes" / "index.html", root / "landscapes" / "index.html"]:
+        assert '/static/js/header.' in f.read_text()
