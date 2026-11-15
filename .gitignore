@@ -14,3 +14,6 @@ site.local.yaml
 .netrc
 .env
 lightroom-recovery.md
+
+# scratch files the user drops in
+temp/

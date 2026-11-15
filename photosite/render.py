@@ -11,7 +11,9 @@ URL layout (all root-relative):
 from __future__ import annotations
 
 import hashlib
+import html as htmllib
 import json
+import re
 import shutil
 from dataclasses import dataclass
 from pathlib import Path
@@ -21,6 +23,7 @@ import markdown
 from jinja2 import Environment, FileSystemLoader, StrictUndefined, select_autoescape
 
 from .config import Config
+from .images import derivative_key, render_photo
 from .model import Catalog, LocationGallery, Photo, Theme
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -90,8 +93,11 @@ class Site:
 
     def nav_items(self):
         items = [("Themes", "/themes/", "themes"), ("Locations", "/locations/", "locations")]
-        if (self.config.content_dir / "about.md").exists():
-            items.append(("About", "/about/", "about"))
+        for name in self.config.menu_pages:            # content pages, in site.yaml order
+            md = self.config.content_dir / f"{name}.md"
+            if md.exists():
+                title, _ = render_markdown(md.read_text(encoding="utf-8"))
+                items.append((title or name.title(), f"/{name}/", name))
         if self.config.site.get("blog_url"):
             items.append(("Blog", self.config.site["blog_url"], "blog"))
         return items
@@ -216,6 +222,7 @@ class Site:
 
         for md in sorted(self.config.content_dir.glob("*.md")) if self.config.content_dir.exists() else []:
             title, body = render_markdown(md.read_text(encoding="utf-8"))
+            body = self.page_images(body, out)
             form = md.stem == "contact" and self.config.contact.form
             self.write(out, f"/{md.stem}/", "contact.html" if form else "page.html",
                        section=md.stem, title=title or md.stem.title(), body=body,
@@ -247,6 +254,68 @@ class Site:
                    prev_url=f"{ctx.url}{prev.id}/" if prev else None,
                    next_url=f"{ctx.url}{nxt.id}/" if nxt else None, next_img=nxt_img,
                    crumbs=crumbs, themes=[(t.name, self.theme_url(t)) for t in p.themes])
+
+    # An image alone on its line in a content page, optionally followed on the
+    # next line by an *italic* caption:   ![alt](photo.jpg)
+    #                                      *Caption with [a link](/somewhere/).*
+    PAGE_IMG = re.compile(r'<p><img ([^>]*?)\s*/?>\s*(?:<em>(.*?)</em>)?\s*</p>', re.S)
+
+    def page_images(self, body: str, out: Path) -> str:
+        """Turn images that sit next to the page's .md file into responsive
+        <figure>s: sRGB, resized, every bit of metadata (GPS too) removed."""
+        def attr(attrs, name):
+            m = re.search(rf'{name}="([^"]*)"', attrs)
+            return htmllib.unescape(m.group(1)) if m else ""
+
+        def figure(m):
+            attrs, caption = m.group(1), m.group(2)
+            src = attr(attrs, "src")
+            path = self.config.content_dir / src
+            if "/" in src or ":" in src or not path.is_file():
+                return m.group(0)                      # not a local page image: leave it
+            rec = self.page_image(path, out)
+            sizes = "(max-width: 40em) 100vw, 30rem"
+            srcset = lambda fmt: ", ".join(f"{rec['url']}{s[fmt]['file']} {s['w']}w"
+                                           for s in rec["sizes"])
+            mid = min(rec["sizes"], key=lambda s: abs(s["w"] - 960))
+            html = (f'<figure class="page-photo"><picture>'
+                    f'<source type="image/webp" srcset="{srcset("webp")}" sizes="{sizes}">'
+                    f'<img src="{rec["url"]}{mid["jpeg"]["file"]}" srcset="{srcset("jpeg")}" '
+                    f'sizes="{sizes}" width="{rec["width"]}" height="{rec["height"]}" '
+                    f'alt="{htmllib.escape(attr(attrs, "alt"))}" loading="lazy" decoding="async">'
+                    f'</picture>')
+            if caption:
+                html += f"<figcaption>{caption}</figcaption>"
+            return html + "</figure>"
+
+        return self.PAGE_IMG.sub(figure, body)
+
+    def page_image(self, path: Path, out: Path) -> dict:
+        """Render (or reuse from .cache/pages/) one content-page image and copy
+        its files to /static/pages/."""
+        s = self.config.images
+        settings = {"widths": [w for w in s.widths if w <= 1600] or s.widths[:1],
+                    "jpeg_quality": s.jpeg_quality, "webp_quality": s.webp_quality,
+                    "webp_method": s.webp_method}
+        src_hash = hashlib.sha256(path.read_bytes()).hexdigest()
+        key = derivative_key(src_hash, settings, "")
+        cache = self.config.cache_dir / "pages"
+        manifest = cache / f"{path.stem}.{key}.json"
+        if manifest.exists():
+            rec = json.loads(manifest.read_text())
+        else:
+            cache.mkdir(parents=True, exist_ok=True)
+            rec = render_photo({"id": path.stem, "key": key, "settings": settings,
+                                "source": str(path), "out_dir": str(cache),
+                                "copyright": "", "source_hash": src_hash})
+            manifest.write_text(json.dumps(rec))
+        dest = out / "static" / "pages"
+        dest.mkdir(parents=True, exist_ok=True)
+        for size in rec["sizes"]:
+            for fmt in ("jpeg", "webp"):
+                shutil.copy2(cache / size[fmt]["file"], dest / size[fmt]["file"])
+        rec["url"] = "/static/pages/"
+        return rec
 
     def write_contact_php(self, dest: Path) -> None:
         """The form handler and its settings, next to /contact/index.html."""

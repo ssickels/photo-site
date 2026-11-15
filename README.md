@@ -157,7 +157,19 @@ lines for things worth knowing (a collection that needs republishing).
   `static/root/apple-touch-icon.png`.
 - **About and Contact:** Markdown files in `content/`. About appears in the
   menu and Contact in the footer; any other `.md` file there becomes a page at
-  `/<name>/` that you can link to.
+  `/<name>/` that you can link to. `menu_pages` in `site.yaml` picks which go
+  in the top menu.
+- **Photos on those pages:** put the image file in `content/` next to the
+  `.md` file, and write it on a line of its own, optionally with an italic
+  caption on the next line:
+
+  ```markdown
+  ![Description for screen readers](print.jpg)
+  *A print on matte paper. [See the photo](/landscapes/some-photo/).*
+  ```
+
+  The build converts it to sRGB, removes all metadata (GPS included) and
+  makes resized WebP and JPEG versions.
 - **Contact form:** see below.
 - **Look:** one stylesheet, `static/css/site.css`; colors, fonts and spacing are
   custom properties at the top. Templates are Jinja2, in `templates/`.

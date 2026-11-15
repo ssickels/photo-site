@@ -83,6 +83,12 @@ images:
   # color), blur (a ~150-byte blurred preview inlined in the page), or none.
   placeholder: color
 
+# ----------------------------------------------------------------- pages
+# Markdown pages in content/ (about.md -> /about/). These ones go in the top
+# menu, in this order, between Locations and Blog; the menu label is the
+# page's "# " heading. Contact is always in the footer.
+menu_pages: [about, prints]
+
 # --------------------------------------------------------------- contact
 # A mail form on /contact/, under the text of content/contact.md. Needs PHP on
 # the host (most shared hosting has it). The recipient and the Turnstile

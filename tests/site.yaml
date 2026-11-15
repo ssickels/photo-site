@@ -6,7 +6,7 @@ site:
 paths:
   publish: fixtures/publish
   output: ../dist/fixture
-  content: ../content
+  content: content
   cache: ../.cache
 themes:
   Landscapes: {}
@@ -23,3 +23,4 @@ location_galleries:
   - node: usa|georgia
 location_labels:
   usa: USA
+menu_pages: [about, prints]

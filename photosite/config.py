@@ -69,6 +69,7 @@ class Config:
     images: ImageSettings
     deploy: dict
     content_dir: Path = None
+    menu_pages: list = field(default_factory=lambda: ["about"])
     contact: ContactSettings = field(default_factory=ContactSettings)
 
     def target(self, name: str) -> dict:
@@ -139,6 +140,7 @@ def load_config(path: str | os.PathLike = "site.yaml", *, publish=None,
         deploy=data.get("deploy") or {},
         content_dir=_resolve(root, paths.get("content", "content")),
         contact=contact,
+        menu_pages=[str(p) for p in (data.get("menu_pages") or ["about"])],
     )
 
 

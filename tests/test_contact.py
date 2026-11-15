@@ -23,7 +23,7 @@ PRIVATE = {"mail_to": "owner@example.test"}
 
 def write_config(tmp: Path, contact=None, private=None) -> Path:
     data = yaml.safe_load(TEST_CONFIG.read_text())
-    data["paths"]["content"] = str(ROOT / "content")
+    data["paths"]["content"] = str(ROOT / "tests" / "content")
     if contact is not None:
         data["contact"] = contact
     if private is not None:

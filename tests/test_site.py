@@ -250,3 +250,34 @@ def test_text_title_when_there_is_no_logo(publish_dir, tmp_path, monkeypatch):
     build(cfg, "production")
     html = (tmp_path / "dist" / "production" / "index.html").read_text()
     assert '<a class="site-title text" href="/">' in html and "/static/img/logo" not in html
+
+
+def test_menu_pages_follow_config_order(config, catalog):
+    from photosite.render import Site
+    config.menu_pages = ["prints", "about", "no-such-page"]
+    labels = [label for label, _, _ in Site(config, catalog, {}).nav_items()]
+    assert labels[:4] == ["Themes", "Locations", "Prints", "About"]
+    assert len(labels) == 4 or labels[4] == "Blog"
+
+
+def test_page_images_become_clean_responsive_figures(config, catalog, tmp_path):
+    from PIL import Image
+    from photosite.render import Site
+    config.content_dir, config.cache_dir = tmp_path / "content", tmp_path / "cache"
+    config.content_dir.mkdir()
+    exif = Image.Exif()
+    exif[0x8825] = {1: "N", 2: (44.0, 20.0, 0.0)}          # GPS
+    Image.new("RGB", (1200, 1600), (90, 120, 150)).save(config.content_dir / "me.jpg", exif=exif)
+    out = tmp_path / "out"
+    body = ('<p><img alt="Me &amp; lake" src="me.jpg" />\n<em>By <a href="/x/">her</a>.</em></p>\n'
+            '<p><img alt="remote" src="https://example.test/a.jpg" /></p>')
+    html = Site(config, catalog, {}).page_images(body, out)
+    assert html.count('<figure class="page-photo">') == 1
+    assert 'alt="Me &amp; lake"' in html and '<figcaption>By <a href="/x/">her</a>.</figcaption>' in html
+    assert 'width="1200" height="1600"' in html and 'type="image/webp"' in html
+    assert 'src="https://example.test/a.jpg"' in html            # not a local file: untouched
+    files = list((out / "static" / "pages").iterdir())
+    assert files and all(f.name.startswith("me.") for f in files)
+    for f in files:
+        with Image.open(f) as im:
+            assert not im.getexif()                               # no GPS, nothing
