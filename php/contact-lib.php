@@ -172,6 +172,45 @@ function contact_rate_record(): void
     @file_put_contents(contact_rl_path(), implode(',', $stamps), LOCK_EX);
 }
 
+// ── HTTP ────────────────────────────────────────────────────────────────────
+
+/**
+ * POST a form to a URL; the response body, or false. curl first: shared hosts
+ * often turn off allow_url_fopen (TCH does on PHP 8.4), which the stream
+ * fallback needs.
+ */
+function contact_post(string $url, array $fields)
+{
+    $body = http_build_query($fields);
+    if (function_exists('curl_init')) {
+        $ch = curl_init($url);
+        curl_setopt_array($ch, [
+            CURLOPT_POST           => true,
+            CURLOPT_POSTFIELDS     => $body,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT        => 8,
+            CURLOPT_CONNECTTIMEOUT => 5,
+            CURLOPT_HTTPHEADER     => ['Content-Type: application/x-www-form-urlencoded'],
+        ]);
+        $raw = curl_exec($ch);
+        if (PHP_VERSION_ID < 80000) {
+            curl_close($ch);          // a no-op since PHP 8, deprecated in 8.5
+        }
+        return is_string($raw) ? $raw : false;
+    }
+    if (!ini_get('allow_url_fopen')) {
+        return false;
+    }
+    $ctx = stream_context_create(['http' => [
+        'method'        => 'POST',
+        'header'        => "Content-Type: application/x-www-form-urlencoded\r\n",
+        'content'       => $body,
+        'timeout'       => 8,
+        'ignore_errors' => true,
+    ]]);
+    return @file_get_contents($url, false, $ctx);
+}
+
 // ── Turnstile ───────────────────────────────────────────────────────────────
 
 /**
@@ -199,22 +238,13 @@ function contact_turnstile_ok(?string &$detail = null): bool
         return false;
     }
 
-    $ctx = stream_context_create(['http' => [
-        'method'        => 'POST',
-        'header'        => "Content-Type: application/x-www-form-urlencoded\r\n",
-        'content'       => http_build_query([
+    $raw = contact_post(
+        'https://challenges.cloudflare.com/turnstile/v0/siteverify',
+        [
             'secret'   => $secret,
             'response' => $token,
             'remoteip' => contact_client_ip(),
-        ]),
-        'timeout'       => 8,
-        'ignore_errors' => true,
-    ]]);
-
-    $raw = @file_get_contents(
-        'https://challenges.cloudflare.com/turnstile/v0/siteverify',
-        false,
-        $ctx
+        ]
     );
     if ($raw === false) {
         $detail = 'siteverify unreachable';
