@@ -24,6 +24,7 @@ from jinja2 import Environment, FileSystemLoader, StrictUndefined, select_autoes
 
 from .config import Config
 from .images import derivative_key, render_photo
+from .trips import load_trips
 from .model import Catalog, LocationGallery, Photo, Theme
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -35,6 +36,7 @@ ROW_H_MOBILE, ROW_H_DESKTOP, ROW_GROW = 150, 260, 1.6
 PHOTO_CHROME = "6.8rem"
 LOGO_H = 53                  # px; matches --logo-h in site.css
 TURNSTILE_ACTION = "photography-contact"   # tells this form's tokens apart on a shared widget
+SECTION = {"theme": "themes", "location": "locations", "trip": "travels"}
 EAGER_ASPECT = 6.0      # tiles until the summed aspect ratio passes this load eagerly
 
 
@@ -71,7 +73,9 @@ class Site:
                                 placeholder=config.images.placeholder,
                                 logo=lambda: self.logo, turnstile_action=TURNSTILE_ACTION)
         self.pages: list[tuple[str, Path]] = []     # (url, file) for sitemap
+        self.written: set[Path] = set()             # every output file this build produced
         self.canonical_urls: list[str] = []
+        self.trips = load_trips(config, catalog, catalog.warnings)
 
     # ------------------------------------------------------------ urls
     @staticmethod
@@ -81,6 +85,10 @@ class Site:
     @staticmethod
     def gallery_url(g: LocationGallery) -> str:
         return f"/locations/{g.slug}/"
+
+    @staticmethod
+    def trip_url(t) -> str:
+        return f"/travels/{t.slug}/"
 
     def canonical_photo_url(self, p: Photo) -> str:
         return f"{self.theme_url(p.canonical_theme)}{p.id}/"
@@ -93,6 +101,8 @@ class Site:
 
     def nav_items(self):
         items = [("Themes", "/themes/", "themes"), ("Locations", "/locations/", "locations")]
+        if self.trips:
+            items.append(("Travels", "/travels/", "travels"))
         for name in self.config.menu_pages:            # content pages, in site.yaml order
             md = self.config.content_dir / f"{name}.md"
             if md.exists():
@@ -145,8 +155,7 @@ class Site:
             url=url, canonical=self.absolute(canonical), **ctx)
         rel = url.strip("/")
         path = out / rel / "index.html" if not rel.endswith(".html") else out / rel
-        path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(html, encoding="utf-8")
+        self.put_text(path, html)
         if in_sitemap and canonical == url:
             self.canonical_urls.append(url)
 
@@ -165,9 +174,7 @@ class Site:
                 dest_rel = f"static/{stem}.{h}{f.suffix}"
             else:
                 dest_rel = f"static/{rel}"
-            dest = out / dest_rel
-            dest.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(f, dest)
+            self.put_copy(f, out / dest_rel)
             self.static_urls[rel] = "/" + dest_rel
         if "img/logo.png" in self.static_urls:          # optional; text title otherwise
             from PIL import Image
@@ -188,10 +195,6 @@ class Site:
 
     def render(self, out: Path) -> int:
         out.mkdir(parents=True, exist_ok=True)
-        for child in out.iterdir():                  # everything but img/ is regenerated
-            if child.name == "img":
-                continue
-            shutil.rmtree(child) if child.is_dir() else child.unlink()
         self.copy_static(out)
         cat = self.catalog
 
@@ -211,10 +214,35 @@ class Site:
                    cards=[self._card(g.name, self.gallery_url(g), g.cover, len(g.photos),
                                      " › ".join(g.context)) for g in cat.curated_galleries])
 
+        if self.trips:
+            self.write(out, "/travels/", "cards.html", section="travels", title="Travels",
+                       cards=[self._card(t.title, self.trip_url(t), t.cover, len(t.photos),
+                                         " · ".join(x for x in (t.date_range, t.place) if x))
+                              for t in self.trips])
+        for t in self.trips:
+            ctx = Context("trip", t.title, self.trip_url(t), t.photos, t)
+            _, body = render_markdown(t.body_md)
+            body = self.page_images(body, out, t.source.parent)
+            tiles = {tl["photo"].id: tl for tl in self.tiles(ctx)}
+            if t.by_day:
+                groups = []
+                for d, ps in t.days:
+                    extra, note = t.notes.get(d, ("", ""))
+                    note_html = self.page_images(render_markdown(note)[1], out, t.source.parent) \
+                        if note else ""
+                    groups.append({"day": d, "extra": extra, "note": note_html,
+                                   "tiles": [tiles[p.id] for p in ps]})
+            else:
+                groups = [{"day": None, "extra": "", "note": "", "tiles": list(tiles.values())}]
+            self.write(out, ctx.url, "trip.html", section="travels", title=t.title,
+                       trip=t, body=body, groups=groups)
+            for i in range(len(t.photos)):
+                self._photo_page(out, ctx, i)
+
         for ctx in contexts:
             g = ctx.obj
             self.write(out, ctx.url, "gallery.html",
-                       section="themes" if ctx.kind == "theme" else "locations",
+                       section=SECTION[ctx.kind],
                        title=ctx.name, context=self.context_crumbs(g) if ctx.kind == "location" else [],
                        description=getattr(g, "description", ""), tiles=self.tiles(ctx))
             for i, p in enumerate(ctx.photos):
@@ -231,9 +259,43 @@ class Site:
                 self.write_contact_php(out / "contact")
 
         self.write(out, "/404.html", "404.html", section="", title="Not found", in_sitemap=False)
-        (out / "robots.txt").write_text(self.robots())
-        (out / "sitemap.xml").write_text(self.sitemap())
+        self.put_text(out / "robots.txt", self.robots())
+        self.put_text(out / "sitemap.xml", self.sitemap())
+        self.put_text(out / ".htaccess", self.htaccess())
+        self.prune(out)
         return len(list(out.rglob("*.html")))
+
+    # Files are only rewritten when their content changes, so their dates stay
+    # put and a deploy (lftp mirror --only-newer) uploads just what changed.
+    def put_text(self, path: Path, text: str) -> None:
+        data = text.encode("utf-8")
+        self.written.add(path)
+        if path.is_file() and path.read_bytes() == data:
+            return
+        path.parent.mkdir(parents=True, exist_ok=True)
+        tmp = path.with_name(path.name + ".tmp")
+        tmp.write_bytes(data)
+        tmp.replace(path)
+
+    def put_copy(self, src: Path, dest: Path) -> None:
+        self.written.add(dest)
+        if dest.is_file() and dest.stat().st_size == src.stat().st_size \
+                and dest.read_bytes() == src.read_bytes():
+            return
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(src, dest)
+
+    def prune(self, out: Path) -> None:
+        """Remove output files this build didn't produce (img/ is managed by
+        images.link_into), then empty folders."""
+        for f in sorted(out.rglob("*"), reverse=True):
+            if f.relative_to(out).parts[0] == "img":
+                continue
+            if f.is_file() or f.is_symlink():
+                if f not in self.written:
+                    f.unlink()
+            elif f.is_dir() and not any(f.iterdir()):
+                f.rmdir()
 
     def _card(self, name, url, cover, count, subtitle):
         return {"name": name, "url": url, "count": count, "subtitle": subtitle,
@@ -248,19 +310,20 @@ class Site:
                   for trail in self.catalog.breadcrumbs(p)]
         nxt_img = self.img(nxt, self.photo_sizes(nxt)) if nxt else None
         self.write(out, url, "photo.html", canonical=self.canonical_photo_url(p),
-                   section="themes" if ctx.kind == "theme" else "locations",
+                   section=SECTION[ctx.kind],
                    title=p.meta.title or ctx.name, photo=p, img=self.img(p, self.photo_sizes(p)),
                    ctx=ctx, index=i, total=len(ctx.photos),
                    prev_url=f"{ctx.url}{prev.id}/" if prev else None,
                    next_url=f"{ctx.url}{nxt.id}/" if nxt else None, next_img=nxt_img,
-                   crumbs=crumbs, themes=[(t.name, self.theme_url(t)) for t in p.themes])
+                   crumbs=crumbs, themes=[(t.name, self.theme_url(t)) for t in p.themes],
+                   trips=[(t.title, self.trip_url(t)) for t in self.trips if p in t.photos])
 
     # An image alone on its line in a content page, optionally followed on the
     # next line by an *italic* caption:   ![alt](photo.jpg)
     #                                      *Caption with [a link](/somewhere/).*
     PAGE_IMG = re.compile(r'<p><img ([^>]*?)\s*/?>\s*(?:<em>(.*?)</em>)?\s*</p>', re.S)
 
-    def page_images(self, body: str, out: Path) -> str:
+    def page_images(self, body: str, out: Path, base: Path | None = None) -> str:
         """Turn images that sit next to the page's .md file into responsive
         <figure>s: sRGB, resized, every bit of metadata (GPS too) removed."""
         def attr(attrs, name):
@@ -270,7 +333,7 @@ class Site:
         def figure(m):
             attrs, caption = m.group(1), m.group(2)
             src = attr(attrs, "src")
-            path = self.config.content_dir / src
+            path = (base or self.config.content_dir) / src
             if "/" in src or ":" in src or not path.is_file():
                 return m.group(0)                      # not a local page image: leave it
             rec = self.page_image(path, out)
@@ -313,7 +376,7 @@ class Site:
         dest.mkdir(parents=True, exist_ok=True)
         for size in rec["sizes"]:
             for fmt in ("jpeg", "webp"):
-                shutil.copy2(cache / size[fmt]["file"], dest / size[fmt]["file"])
+                self.put_copy(cache / size[fmt]["file"], dest / size[fmt]["file"])
         rec["url"] = "/static/pages/"
         return rec
 
@@ -321,7 +384,7 @@ class Site:
         """The form handler and its settings, next to /contact/index.html."""
         c, t = self.config.contact, self.target
         for name in ("contact-lib.php", "send.php"):
-            shutil.copy2(ROOT / "php" / name, dest / name)
+            self.put_copy(ROOT / "php" / name, dest / name)
         settings = {
             "mail_to": c.mail_to,
             "mail_from": c.mail_from,
@@ -338,11 +401,62 @@ class Site:
         # A PHP file that only returns an array: requesting it shows nothing,
         # so the secret and address can't be read over the web.
         blob = json.dumps(settings).replace("\\", "\\\\").replace("'", "\\'")
-        (dest / "config.php").write_text(
+        self.put_text(dest / "config.php",
             "<?php\n// Written by the build from site.yaml and the private site.local.yaml.\n"
-            f"return json_decode('{blob}', true);\n", encoding="utf-8")
+            f"return json_decode('{blob}', true);\n")
 
     # ----------------------------------------------------------- extras
+    def htaccess(self) -> str:
+        """Apache settings (TCH and most shared hosting). Ignored elsewhere."""
+        base = self.target["base_url"]
+        host = base.split("://", 1)[-1].split("/", 1)[0]
+        lines = [
+            "# Written by the build; edits here are overwritten on the next build.",
+            "Options -Indexes",
+            "DirectoryIndex index.html index.php",
+            "ErrorDocument 404 /404.html",
+            "AddDefaultCharset utf-8",
+            "AddType image/webp .webp",
+            "",
+        ]
+        if host:
+            esc = re.escape(host)
+            lines += [
+                f"# One address for the site: {base}",
+                "<IfModule mod_rewrite.c>",
+                "  RewriteEngine On",
+                "  RewriteCond %{HTTPS} !=on [OR]",
+                f"  RewriteCond %{{HTTP_HOST}} !^{esc}$ [NC]",
+                "  RewriteCond %{REQUEST_URI} !^/\\.well-known/",
+                f"  RewriteRule ^ {base}%{{REQUEST_URI}} [R=301,L]",
+                "</IfModule>",
+                "",
+            ]
+        lines += [
+            "<IfModule mod_headers.c>",
+            "  # img/ and static/ file names contain a hash of their content: cache forever",
+            '  <If "%{REQUEST_URI} =~ m#^/(img|static)/#">',
+            '    Header set Cache-Control "public, max-age=31536000, immutable"',
+            "  </If>",
+            '  <FilesMatch "\\.html$">',
+            '    Header set Cache-Control "no-cache"',
+            "  </FilesMatch>",
+            '  Header always set X-Content-Type-Options "nosniff"',
+            '  Header always set Referrer-Policy "strict-origin-when-cross-origin"',
+            '  Header always set X-Frame-Options "SAMEORIGIN"',
+        ]
+        if self.target["noindex"]:
+            lines.append('  Header always set X-Robots-Tag "noindex, nofollow"')
+        lines += [
+            "</IfModule>",
+            "",
+            "<IfModule mod_deflate.c>",
+            "  AddOutputFilterByType DEFLATE text/html text/css text/plain application/javascript image/svg+xml application/xml application/json",
+            "</IfModule>",
+            "",
+        ]
+        return "\n".join(lines)
+
     def robots(self) -> str:
         if self.target["noindex"]:
             return "User-agent: *\nDisallow: /\n"

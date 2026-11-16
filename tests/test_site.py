@@ -2,6 +2,7 @@
 import functools
 import http.server
 import re
+from pathlib import Path
 import threading
 import urllib.error
 import urllib.request
@@ -256,8 +257,8 @@ def test_menu_pages_follow_config_order(config, catalog):
     from photosite.render import Site
     config.menu_pages = ["prints", "about", "no-such-page"]
     labels = [label for label, _, _ in Site(config, catalog, {}).nav_items()]
-    assert labels[:4] == ["Themes", "Locations", "Prints", "About"]
-    assert len(labels) == 4 or labels[4] == "Blog"
+    assert labels[:5] == ["Themes", "Locations", "Travels", "Prints", "About"]
+    assert len(labels) == 5 or labels[5] == "Blog"
 
 
 def test_page_images_become_clean_responsive_figures(config, catalog, tmp_path):
@@ -281,3 +282,48 @@ def test_page_images_become_clean_responsive_figures(config, catalog, tmp_path):
     for f in files:
         with Image.open(f) as im:
             assert not im.getexif()                               # no GPS, nothing
+
+
+def test_travels(site, server):
+    out = site.output_dir / "production"
+    index = (out / "travels" / "index.html").read_text()
+    assert "Skye and Raasay" in index and "September 1–6, 2023" in index
+    page = (out / "travels" / "2023-09-scotland" / "index.html").read_text()
+    assert "A test trip." in page
+    assert page.count('class="grid"') == 2                       # one per day: Sep 2, Sep 5
+    assert "Saturday, September 2" in page and "Tuesday, September 5" in page
+    assert "20230904-dsc05620" not in page                       # excluded
+    photo = (out / "travels" / "2023-09-scotland" / "20230905-dsc05700" / "index.html").read_text()
+    assert re.search(r"Skye and Raasay</a> · 2 of 2", photo)
+    theme_photo = next(out.glob("*/20230902-dsc05501/index.html")).read_text()
+    assert 'href="/travels/2023-09-scotland/"' in theme_photo    # photo pages link their trip
+    assert 'href="/travels/"' in (out / "index.html").read_text()  # in the menu
+
+
+def test_trip_date_range_text():
+    import datetime as dt
+    from photosite.trips import date_range
+    d = dt.date
+    assert date_range(d(2026, 1, 19), d(2026, 1, 27)) == "January 19–27, 2026"
+    assert date_range(d(2026, 9, 24), d(2026, 10, 4)) == "September 24 – October 4, 2026"
+    assert date_range(d(2025, 12, 30), d(2026, 1, 2)) == "December 30, 2025 – January 2, 2026"
+    assert date_range(d(2026, 1, 1), d(2026, 1, 1)) == "January 1, 2026"
+
+
+def test_trip_day_notes(site):
+    page = (site.output_dir / "production" / "travels" / "2023-09-scotland" / "index.html").read_text()
+    assert "Tuesday, September 5 · Raasay" in page and "Ferry to <em>Raasay</em>." in page
+    assert "Sunday, September 3" in page and "A rest day, no photos." in page
+    assert page.index("Saturday, September 2") < page.index("Sunday, September 3") \
+        < page.index("Tuesday, September 5")
+    assert page.count('class="grid"') == 2             # the note-only day has no grid
+    assert page.count('trip-story') == 1 and "A test trip." in page
+
+
+def test_suggest_trips(config, catalog):
+    from photosite.trips import suggest_trips
+    config.content_dir = Path(__file__).parent / "content"
+    text = suggest_trips(config, catalog, min_photos=3)
+    assert "September 2–5, 2023  ·  3 photos" in text
+    assert "dates: 2023-09-02 to 2023-09-05" in text and "place: united kingdom" in text
+    assert "[has a page: 2023-09-scotland]" in text

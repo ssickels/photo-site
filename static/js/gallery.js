@@ -4,8 +4,10 @@
 // rather than greedy filling, so one panorama doesn't blow up its row.
 (function () {
   "use strict";
-  var grid = document.querySelector(".grid");
-  if (!grid) return;
+  // Every .grid on the page (a trip page has one per day).
+  Array.prototype.forEach.call(document.querySelectorAll(".grid"), justify);
+
+  function justify(grid) {
   var items = Array.prototype.slice.call(grid.children);
   var ars = items.map(function (li) {
     return parseFloat(li.style.getPropertyValue("--ar")) || 1.5;
@@ -65,4 +67,5 @@
   };
   if ("ResizeObserver" in window) new ResizeObserver(onResize).observe(grid);
   else window.addEventListener("resize", onResize);
+  }
 })();

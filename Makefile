@@ -1,12 +1,13 @@
 PY := .venv/bin/python
 TEST_CFG := tests/site.yaml
 
-.PHONY: help venv build staging locations sizes fixtures test fixture-site serve serve-fixture clean
+.PHONY: help venv build staging locations trips sizes fixtures test fixture-site serve serve-fixture clean
 
 help:
 	@echo "make build        build dist/production from the publish folder"
 	@echo "make staging      build dist/staging (noindex)"
 	@echo "make locations    print the place-keyword tree with counts"
+	@echo "make trips        list likely trips (for Travels pages)"
 	@echo "make sizes        derivative file sizes per width/format"
 	@echo "make test         run the test suite (synthetic fixture)"
 	@echo "make fixture-site build the site from the fixture into dist/"
@@ -25,6 +26,9 @@ staging:
 
 locations:
 	$(PY) build.py locations
+
+trips:
+	$(PY) build.py trips
 
 sizes:
 	$(PY) build.py sizes

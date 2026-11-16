@@ -18,6 +18,8 @@ similar who already keeps their work organized in Lightroom.
 - **Locations:** galleries built from your hierarchical place keywords
   (`places > usa > maine > acadia`), with clickable breadcrumbs on every photo.
 - **Cover photos chosen in Lightroom** with a keyword (`covers > landscapes`).
+- **Travels:** a page per trip, with your story at the top and the photos
+  grouped by day, made from one small Markdown file.
 - Justified gallery rows; a photo page with arrow keys, swipe, pinch-zoom, Esc
   to go back, and the title, caption, date, location and themes underneath.
 - Responsive images (WebP + JPEG at four widths), converted to sRGB, **GPS
@@ -132,6 +134,7 @@ shown in several themes.
 | `make build` | Build `dist/production` from the publish folder |
 | `make staging` | Build `dist/staging` (noindex, disallow-all robots.txt) |
 | `make locations` | Print the place-keyword tree with photo counts |
+| `make trips` | List likely trips, to start a Travels page |
 | `make sizes` | Image file sizes per width and format |
 | `make serve` | Serve `dist/production` at http://localhost:8000 |
 | `make test` | Run the test suite against the synthetic fixture |
@@ -173,6 +176,36 @@ lines for things worth knowing (a collection that needs republishing).
 - **Contact form:** see below.
 - **Look:** one stylesheet, `static/css/site.css`; colors, fonts and spacing are
   custom properties at the top. Templates are Jinja2, in `templates/`.
+
+## Travels
+
+A trip page shows the published photos from a date range (and optionally a
+place), oldest first under a heading for each day, with your text above them.
+Each trip is one Markdown file in `content/travels/`; the file name is its web
+address (`2026-01-norway.md` → `/travels/2026-01-norway/`).
+
+```markdown
+---
+dates: 2026-01-19 to 2026-01-27
+place: norway                 # optional: a place keyword, as in location_galleries
+exclude: [20260125-dsc07109]  # optional: photos to leave out (the last part of a photo's address)
+cover: 20260123-dsc07070      # optional: the photo on the Travels index card
+---
+# Winter in Northern Norway
+
+The story of the trip.
+
+## 2026-01-23 North Cape
+Optional text for one day, shown under "Friday, January 23 · North Cape".
+```
+
+- `photos: [...]` instead of the dates' automatic choice shows only those photos.
+- `by_day: false` shows one grid without day headings.
+- Photos must be published in a theme; a trip page doesn't add photos.
+- `make trips` lists likely trips from your published photos (runs of photos
+  in one region, a few days apart), with `dates:` and `place:` lines ready to
+  copy, and marks the ones that already have a page.
+- Each photo's page links to the trips it's in.
 
 ## Contact form
 

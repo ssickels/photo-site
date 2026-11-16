@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% from "_macros.html" import picture, ph %}
+{% block main %}
+<header class="gallery-header trip-header">
+  <p class="context crumbs"><a href="/travels/">Travels</a></p>
+  <h1 class="page-title">{{ title }}</h1>
+  <p class="trip-meta">{{ trip.date_range }}{% if trip.place %} · {{ trip.place }}{% endif %} · {{ trip.photos | length }} photo{{ "" if trip.photos | length == 1 else "s" }}</p>
+</header>
+{% if body.strip() %}
+<div class="prose trip-story">
+  {{ body | safe }}
+</div>
+{% endif %}
+{% for g in groups %}
+<section class="trip-day">
+  {% if g.day and (groups | length > 1 or g.note or g.extra) %}<h2 class="day-heading">{{ g.day.strftime("%A, %B") }} {{ g.day.day }}{% if g.extra %} · {{ g.extra }}{% endif %}</h2>{% endif %}
+  {% if g.note %}<div class="prose day-note">{{ g.note | safe }}</div>{% endif %}
+  {% if g.tiles %}
+  <ul class="grid">
+  {% for t in g.tiles %}
+    <li id="{{ t.photo.id }}" style="--ar:{{ '%.4f' % t.img.ar }};{{ ph(t.img) }}">
+      <a href="{{ t.url }}">{{ picture(t.img, loading="eager" if t.eager else "lazy") }}</a>
+    </li>
+  {% endfor %}
+  </ul>
+  {% endif %}
+</section>
+{% endfor %}
+{% endblock %}
+{% block scripts %}<script src="{{ static('js/gallery.js') }}" defer></script>{% endblock %}

@@ -131,6 +131,7 @@ deploy:
   staging:
     base_url: https://new.stevesickels.com
     host: belle.tchmachines.com
+    user: steve@new.stevesickels.com   # cPanel FTP account; password in ~/.netrc
     remote_dir: /          # FTP account's home = the staging docroot
     noindex: true
   production:

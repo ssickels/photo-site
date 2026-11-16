@@ -169,6 +169,15 @@ h1, h2, h3 { font-weight: 500; line-height: 1.25; }
 .grid a:hover img { opacity: 0.9; }
 .grid li:target { outline: 2px solid var(--focus); outline-offset: 2px; }
 
+/* Travels: a trip page is a story, then one grid per day */
+.trip-meta { color: var(--muted); font-size: var(--small); margin: -0.5rem 0 0; }
+.prose.trip-story { margin: 1.5rem 0 2rem; max-width: var(--text-w); }
+.trip-day + .trip-day { margin-top: 2.25rem; }
+.prose.day-note { margin: 0 0 1rem; max-width: var(--text-w); }
+.prose.day-note > :first-child { margin-top: 0; }
+.day-heading { font-size: 1rem; font-weight: 500; color: var(--muted); margin: 0 0 0.75rem;
+  padding-bottom: 0.4rem; border-bottom: 1px solid var(--line); }
+
 /* ==========================================================================
    Photo page
    ========================================================================== */
