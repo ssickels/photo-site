@@ -19,6 +19,7 @@
     var W = grid.clientWidth;
     var gap = parseFloat(cs.columnGap) || 0;
     var target = parseFloat(cs.getPropertyValue("--row-h")) || 240;
+    target = Math.min(target, window.innerHeight * 0.7);     // a row never runs past the screen
     var n = ars.length;
     if (!W || !n) return;
 

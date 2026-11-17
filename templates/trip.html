@@ -18,8 +18,9 @@
   {% if g.tiles %}
   <ul class="grid">
   {% for t in g.tiles %}
-    <li id="{{ t.photo.id }}" style="--ar:{{ '%.4f' % t.img.ar }};{{ ph(t.img) }}">
-      <a href="{{ t.url }}">{{ picture(t.img, loading="eager" if t.eager else "lazy") }}</a>
+    <li id="{{ t.photo.id }}" style="--ar:{{ '%.4f' % t.img.ar }}">
+      <a href="{{ t.url }}" style="{{ ph(t.img) }}">{{ picture(t.img, loading="eager" if t.eager else "lazy") }}</a>
+      {% if t.photo.meta.title %}<p class="tile-title">{{ t.photo.meta.title }}</p>{% endif %}
     </li>
   {% endfor %}
   </ul>

@@ -33,6 +33,7 @@ ROOT = Path(__file__).resolve().parent.parent
 # Approximate tile heights for the justified grid (keep in sync with site.css
 # --row-h). Tiles grow up to ~1.6x to fill a row; used only for `sizes`.
 ROW_H_MOBILE, ROW_H_DESKTOP, ROW_GROW = 150, 260, 1.6
+TRIP_ROW_H_MOBILE, TRIP_ROW_H_DESKTOP = 340, 590     # trip pages: a few photos per day, larger
 # How much of the viewport height the photo-page image may use (site.css).
 PHOTO_CHROME = "6.8rem"
 LOGO_H = 53                  # px; matches --logo-h in site.css
@@ -141,10 +142,11 @@ class Site:
                 "sizes": sizes, "color": rec["color"], "lqip": rec["lqip"], "alt": p.alt,
                 "og": self.absolute(f"/img/{_pick(rec, 1600)['jpeg']['file']}")}
 
-    def tile_sizes(self, p: Photo) -> str:
+    def tile_sizes(self, p: Photo, trip: bool = False) -> str:
         ar = self.records[p.id]["width"] / self.records[p.id]["height"]
-        m = round(ar * ROW_H_MOBILE * ROW_GROW)
-        d = round(ar * ROW_H_DESKTOP * ROW_GROW)
+        mh, dh = (TRIP_ROW_H_MOBILE, TRIP_ROW_H_DESKTOP) if trip else (ROW_H_MOBILE, ROW_H_DESKTOP)
+        m = round(ar * mh * ROW_GROW)
+        d = round(ar * dh * ROW_GROW)
         return f"(max-width: 40em) min(100vw, {m}px), min(100vw, {d}px)"
 
     @staticmethod
@@ -159,7 +161,7 @@ class Site:
     def tiles(self, ctx: Context) -> list[dict]:
         out, acc = [], 0.0
         for p in ctx.photos:
-            im = self.img(p, self.tile_sizes(p))
+            im = self.img(p, self.tile_sizes(p, trip=ctx.kind == "trip"))
             out.append({"photo": p, "img": im, "url": f"{ctx.url}{p.id}/",
                         "eager": acc < EAGER_ASPECT})
             acc += im["ar"]
