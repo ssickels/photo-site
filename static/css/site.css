@@ -107,7 +107,13 @@ h1, h2, h3 { font-weight: 500; line-height: 1.25; }
 /* ==========================================================================
    Home
    ========================================================================== */
-.hero { margin: 0 auto; max-width: calc((100vh - 9rem) * var(--ar)); background: var(--tile-bg); }
+/* The photo is as large as fits above the theme list: header and list
+   heights are measured by header.js (fallbacks without JS). */
+.hero {
+  margin: 0 auto; background: var(--tile-bg);
+  max-width: calc((100vh - var(--header-space, 5.25rem) - var(--below-hero, 3.25rem) - 1rem) * var(--ar));
+  max-width: calc((100svh - var(--header-space, 5.25rem) - var(--below-hero, 3.25rem) - 1rem) * var(--ar));
+}
 .hero img { width: 100%; }
 .theme-links {
   display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline;

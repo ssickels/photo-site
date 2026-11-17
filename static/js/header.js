@@ -11,6 +11,11 @@
     full = header.offsetHeight;
     root.style.setProperty("--header-space", full + "px");
     if (compact) header.classList.add("compact");
+    // Home: room the theme list under the photo takes (more when it wraps),
+    // so the photo plus the list fit the window (see .hero in site.css).
+    var below = document.querySelector(".theme-links");
+    if (below) root.style.setProperty("--below-hero",
+      below.offsetHeight + parseFloat(getComputedStyle(below).marginTop) + "px");
   }
 
   function update() {
