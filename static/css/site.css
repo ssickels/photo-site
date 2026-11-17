@@ -186,7 +186,7 @@ h1, h2, h3 { font-weight: 500; line-height: 1.25; }
 .trip-day .grid li { background: none; }
 .trip-day .grid a { background-color: var(--tile-bg); }   /* the placeholder sits behind the photo only */
 .tile-title { margin: 0.45rem 0 0; color: var(--muted); font-size: var(--small); }
-@media (max-width: 40em) { .trip-day .grid { --row-h: 340px; } }
+@media (max-width: 40em) { .trip-day .grid { --row-h: 450px; } }
 .prose.day-note > :first-child { margin-top: 0; }
 .day-heading { font-size: 1rem; font-weight: 500; color: var(--muted); margin: 0 0 0.75rem;
   padding-bottom: 0.4rem; border-bottom: 1px solid var(--line); }

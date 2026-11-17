@@ -215,7 +215,8 @@ Optional text for one day, shown under "Friday, January 23 · North Cape".
   copy, and marks the ones that already have a page.
 - Each photo's page links to the trips it's in.
 - Trip photos are shown larger than in galleries (rows about 590px tall,
-  340px on phones, never taller than 70% of the window), with each photo's
+  on phones each photo fills the width; never taller than 70% of the
+  window on larger screens), with each photo's
   Lightroom title underneath. The layout suits one to three chosen photos a
   day; for many snapshots, a blog post is the better home. Row heights:
   `--row-h` under `.trip-day .grid` in `site.css`, kept in step with
