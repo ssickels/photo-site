@@ -49,9 +49,18 @@ def settings(config: Config, target: str) -> dict:
         raise ConfigError("never put a password in site.yaml; run ./build.py credentials "
                           f"{target}")
     remote = str(t.get("remote_dir") or "/")
+    keep = t.get("keep") or []
+    if isinstance(keep, str) or not all(isinstance(k, str) and k.strip("/") for k in keep):
+        raise ConfigError(f"deploy.{target}.keep must be a list of folder names, e.g. [new.example.com]")
     return {"method": method, "host": str(t["host"]), "user": str(t["user"]),
             "remote_dir": remote if remote.endswith("/") else remote + "/",
-            "port": t.get("port")}
+            "port": t.get("port"), "keep": [k.strip("/") for k in keep]}
+
+
+def keep_patterns(s: dict) -> list[str]:
+    """lftp --exclude regexes: the server's own files, plus folders in the
+    target's `keep:` list (e.g. another site's folder inside this docroot)."""
+    return KEEP_ON_SERVER + [rf"^{re.escape(k)}(/|$)" for k in s.get("keep", [])]
 
 
 # ------------------------------------------------------------------ netrc
@@ -198,7 +207,7 @@ def deploy(config: Config, target: str, dry_run: bool = False) -> int:
         raise ConfigError(f"no password for {s['user']} on {s['host']}: run "
                           f"./build.py credentials {target}")
 
-    excludes = " ".join(f"--exclude {_q(x)}" for x in KEEP_ON_SERVER)
+    excludes = " ".join(f"--exclude {_q(x)}" for x in keep_patterns(s))
     mirror = f"mirror --reverse --only-newer --no-perms --parallel=3 {excludes}"
     remote, src = s["remote_dir"], str(local)
     print(f"deploy: {local} -> ftps://{s['user']}@{s['host']}{remote}"
@@ -262,7 +271,8 @@ def _deploy_rsync(s: dict, local: Path, dry_run: bool) -> int:
     port = ["-e", f"ssh -p {s['port']}"] if s.get("port") else []
     cmd = ["rsync", "-rlt", "--delete", "--checksum", "--itemize-changes", *port,
            *[f"--exclude={x}" for x in ("/.well-known/", "/cgi-bin/", "error_log",
-                                        "/.ftpquota", "/.user.ini", "/php.ini")],
+                                        "/.ftpquota", "/.user.ini", "/php.ini",
+                                        *(f"/{k}/" for k in s.get("keep", [])))],
            *(["--dry-run"] if dry_run else []),
            f"{local}/", f"{s['user']}@{s['host']}:{s['remote_dir']}"]
     return subprocess.run(cmd).returncode

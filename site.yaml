@@ -137,5 +137,10 @@ deploy:
   production:
     base_url: https://stevesickels.com
     host: belle.tchmachines.com
+    user: deploy@stevesickels.com      # cPanel FTP account (home: public_html); password in ~/.netrc
     remote_dir: /
     noindex: false
+    # Folders or files in this docroot that a deploy never uploads over or
+    # deletes: staging's docroot (public_html/new.stevesickels.com) and
+    # Google Search Console's ownership check.
+    keep: [new.stevesickels.com, google14d470a490955bad.html]

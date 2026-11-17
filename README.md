@@ -313,13 +313,24 @@ Working: everything above, tested against a real Lightroom library of about
 400 published photos and a synthetic fixture (`make test`; the contact form's
 PHP is tested too when `php` is installed).
 
-Not built yet:
+## Deploying
 
-- `make deploy`: FTPS upload via `lftp mirror --reverse --delete`, with
-  rsync-over-SSH as an option (`deploy:` in `site.yaml`). Credentials will come
-  from `~/.netrc` or environment variables, never from the repo. Until then,
-  upload `dist/production/` with any FTP client.
-- An `.htaccess` with caching headers for Apache hosts.
+`./build.py --deploy staging` (or `production`) builds the site and uploads it
+over FTPS with `lftp mirror --reverse --delete --only-newer`: only changed
+files go up, and files no longer in the build are removed from the server.
+Add `--dry-run` to only list what would change. Settings are under `deploy:`
+in `site.yaml` (host, FTP account, folder; rsync over SSH is an option).
+
+- The FTP password is stored once with `./build.py credentials production`,
+  in `~/.netrc` (readable only by you), never in the repo.
+- Never touched on the server: `.well-known/` (certificate checks),
+  `cgi-bin/`, error logs, PHP settings, and the PHP-version blocks cPanel
+  writes into `.htaccess` (carried over into the new one).
+- `keep: [folder, ...]` under a target protects folders inside its document
+  root that belong to other sites, e.g. a staging subdomain whose folder
+  lives in the main domain's `public_html`. Without it, a deploy deletes them.
+- The build writes an Apache `.htaccess`: caching headers, security headers,
+  https and host redirects, and the old-address redirects.
 
 ## License
 

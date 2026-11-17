@@ -79,3 +79,17 @@ def test_redactor_hides_password_in_every_form():
     out = clean(line)
     assert "uX9" not in out and "%21%40" not in out
     assert "ftp://me%40site.test:***@host.test/a b" in out
+
+
+def test_keep_protects_other_sites_folders(config):
+    import re
+    config.deploy = {"production": {"host": "h", "user": "u", "keep": ["new.example.test/"]}}
+    pats = deploy.keep_patterns(deploy.settings(config, "production"))
+    kept = lambda path: any(re.search(p, path) for p in pats)
+    assert kept("new.example.test/") and kept("new.example.test/index.html")
+    assert kept(".well-known/acme-challenge/x") and kept("cgi-bin/")
+    assert not kept("newxexample.test/") and not kept("themes/new.example.test/")
+    assert not kept("index.html") and not kept("img/a.jpg")
+    config.deploy["production"]["keep"] = "new.example.test"
+    with pytest.raises(ConfigError, match="keep"):
+        deploy.settings(config, "production")
