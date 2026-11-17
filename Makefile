@@ -1,7 +1,7 @@
 PY := .venv/bin/python
 TEST_CFG := tests/site.yaml
 
-.PHONY: help venv build staging locations trips sizes fixtures test fixture-site serve serve-fixture clean
+.PHONY: help venv build staging locations trips sizes fixtures test fixture-site serve serve-staging serve-fixture clean
 
 help:
 	@echo "make build        build dist/production from the publish folder"
@@ -12,6 +12,7 @@ help:
 	@echo "make test         run the test suite (synthetic fixture)"
 	@echo "make fixture-site build the site from the fixture into dist/"
 	@echo "make serve        serve dist/production on http://localhost:8000"
+	@echo "make serve-staging serve dist/staging on http://localhost:8001"
 	@echo "make serve-fixture serve the fixture site on http://localhost:8000"
 	@echo "make venv         create .venv and install requirements"
 
@@ -44,6 +45,9 @@ fixture-site:
 
 serve:
 	$(PY) -m http.server 8000 --directory dist/production
+
+serve-staging:
+	$(PY) -m http.server 8001 --bind 127.0.0.1 --directory dist/staging
 
 serve-fixture:
 	$(PY) -m http.server 8000 --directory dist/fixture/production

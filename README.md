@@ -127,6 +127,31 @@ shown in several themes.
 - Changing only a keyword setting doesn't mark photos for republishing in
   Lightroom; use **Mark to Republish** on the collections afterwards.
 
+## Day to day
+
+Run these in the `photo-site` folder. Every command rebuilds first, so it picks
+up everything: photos newly published from Lightroom, trip files, About,
+Prints, and the redirect list.
+
+| To... | Run |
+|---|---|
+| Look on your own computer only | `./build.py --target staging`, then `make serve-staging` and open http://localhost:8001 |
+| Try it on staging (new.stevesickels.com, hidden from search engines) | `./build.py --deploy staging` |
+| Put it on the live site | `./build.py --deploy production` |
+| See what an upload would change, without changing anything | add `--dry-run` |
+
+- Only changed files are uploaded: a trip edit goes up in seconds. Changing
+  the stylesheet or a script changes every page (they link to it by a
+  name that includes its content hash), so that upload takes ~15 minutes.
+- A new trip is a new `.md` file in `content/travels/` (see [Travels](#travels));
+  its photos must already be published to a theme in Lightroom.
+  `./build.py trips` suggests date ranges.
+- After an upload, reload the page; on a phone, close the tab and reopen it
+  if the old version sticks.
+- Uploading doesn't save your edits in git: commit and push separately.
+- Something wrong on the live site? Fix the file and deploy again; each
+  upload makes the server match the build exactly.
+
 ## Commands
 
 | Command | What it does |
@@ -137,6 +162,9 @@ shown in several themes.
 | `make trips` | List likely trips, to start a Travels page |
 | `make sizes` | Image file sizes per width and format |
 | `make serve` | Serve `dist/production` at http://localhost:8000 |
+| `make serve-staging` | Serve `dist/staging` at http://localhost:8001 |
+| `./build.py --deploy staging` / `production` | Build, then upload (add `--dry-run` to only list changes) |
+| `./build.py credentials staging` / `production` | Store that FTP account's password in `~/.netrc` |
 | `make test` | Run the test suite against the synthetic fixture |
 | `make fixture-site` / `make serve-fixture` | Build and serve a demo from the fixture |
 
