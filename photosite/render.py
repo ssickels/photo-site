@@ -373,7 +373,29 @@ class Site:
                 html += f"<figcaption>{caption}</figcaption>"
             return html + "</figure>"
 
-        return self.PAGE_IMG.sub(figure, body)
+        return self.embed_posters(self.PAGE_IMG.sub(figure, body))
+
+    POSTER = re.compile(r'<span class="embed-poster" data-poster="([^"]*)"></span>')
+
+    def embed_posters(self, body: str) -> str:
+        """Fill a click-to-load embed's poster (see embeds.py) with a published
+        photo, named by file name (e.g. 20260119-DSC06313) or by its URL id."""
+        def poster(m):
+            name = htmllib.unescape(m.group(1)).strip()
+            p = next((p for p in self.catalog.photos.values()
+                      if name in (p.stem, p.id, p.stem.rstrip("~"))), None)
+            if p is None:
+                self.catalog.warnings.append(f"embed poster {name!r}: no published photo by that name")
+                return ""
+            rec = self.records[p.id]
+            share = min(1.0, rec["width"] / rec["height"] / (16 / 9))   # narrower than 16:9: black bars
+            im = self.img(p, f"calc(min(100vw, 60rem) * {share:.3f})")
+            return (f'<span class="embed-poster"><picture>'
+                    f'<source type="image/webp" srcset="{im["webp_srcset"]}" sizes="{im["sizes"]}">'
+                    f'<img src="{im["src"]}" srcset="{im["jpeg_srcset"]}" sizes="{im["sizes"]}" '
+                    f'width="{im["w"]}" height="{im["h"]}" alt="" loading="lazy" decoding="async">'
+                    f'</picture></span>')
+        return self.POSTER.sub(poster, body)
 
     def page_image(self, path: Path, out: Path) -> dict:
         """Render (or reuse from .cache/pages/) one content-page image and copy

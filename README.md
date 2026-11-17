@@ -209,6 +209,11 @@ lines for things worth knowing (a collection that needs republishing).
   Share → Embed a map) on a line of its own in any `.md` file, trips included.
   The page shows a "Show map" placeholder of the same shape; nothing is loaded
   from Google until the visitor clicks it (`photosite/embeds.py`).
+- **Videos (Vimeo, YouTube):** the same, with the video's embed code (Vimeo:
+  Share → Embed). One click plays it; Vimeo is asked not to track the viewer.
+  Set `title="Aurora #1"` for the button, and add `poster="20260119-DSC06313"`
+  (a published photo's file name or address id) to show that photo, whole and
+  on black like the player, in the box until the click.
 - **Contact form:** see below.
 - **Look:** one stylesheet, `static/css/site.css`; colors, fonts and spacing are
   custom properties at the top. Templates are Jinja2, in `templates/`.

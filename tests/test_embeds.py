@@ -36,3 +36,32 @@ def test_page_with_embed_gets_its_script(config, catalog, tmp_path):
     prints = (out / "prints" / "index.html").read_text(encoding="utf-8")
     assert "js/embed." in about and "<iframe" not in about
     assert "js/embed." not in prints
+
+
+def test_vimeo_plays_on_click_without_tracking():
+    vid = ('<iframe src="https://player.vimeo.com/video/123456?h=abc" width="640" height="360" '
+           'frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen '
+           'title="Aurora #1"></iframe>')
+    out = click_to_load(vid)
+    assert 'href="https://player.vimeo.com/video/123456?h=abc"' in out
+    assert 'data-embed="https://player.vimeo.com/video/123456?h=abc&amp;autoplay=1&amp;dnt=1"' in out
+    assert 'data-allow="autoplay; fullscreen; picture-in-picture"' in out
+    assert "Play Aurora #1" in out and "Loads Vimeo" in out and "--embed-ar:640 / 360" in out
+    assert "autoplay" not in click_to_load(MAP)               # maps unchanged
+
+
+def test_poster_shows_a_published_photo_until_the_click(config, catalog):
+    from photosite.render import Site
+    p = next(iter(catalog.photos.values()))
+    rec = {"width": 1600, "height": 900, "color": "#123", "lqip": "",
+           "sizes": [{"w": w, "jpeg": {"file": f"x-{w}.jpg"}, "webp": {"file": f"x-{w}.webp"}}
+                     for w in (960, 1600)]}
+    site = Site(config, catalog, {p.id: rec}, "production")
+    vid = (f'<iframe src="https://player.vimeo.com/video/1" width="640" height="360" '
+           f'poster="{p.stem}" title="Aurora #1"></iframe>')
+    out = site.embed_posters(click_to_load(vid))
+    assert 'class="embed has-poster"' in out and 'srcset="/img/x-960.webp 960w' in out
+    assert "data-poster" not in out and "Play Aurora #1" in out
+    missing = site.embed_posters(click_to_load(vid.replace(p.stem, "no-such-photo")))
+    assert "<picture" not in missing and "data-poster" not in missing
+    assert any("no-such-photo" in w for w in catalog.warnings)
