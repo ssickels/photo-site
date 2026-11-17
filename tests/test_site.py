@@ -327,3 +327,13 @@ def test_suggest_trips(config, catalog):
     assert "September 2–5, 2023  ·  3 photos" in text
     assert "dates: 2023-09-02 to 2023-09-05" in text and "place: united kingdom" in text
     assert "[has a page: 2023-09-scotland]" in text
+
+
+def test_share_preview_tags():
+    """Every page has Open Graph tags; static/img/share.jpg is the default
+    preview image, a photo page previews its own photo."""
+    from pathlib import Path
+    base = (Path(__file__).parent.parent / "templates" / "base.html").read_text(encoding="utf-8")
+    photo = (Path(__file__).parent.parent / "templates" / "photo.html").read_text(encoding="utf-8")
+    assert "static('img/share.jpg')" in base and 'og:url" content="{{ canonical }}"' in base
+    assert "{% block og_image %}" in photo and "img.og" in photo

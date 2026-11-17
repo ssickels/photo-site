@@ -2,7 +2,7 @@
 {% from "_macros.html" import picture, ph %}
 {% block title %}{{ site.title }}{% endblock %}
 {% block body_class %}home{% endblock %}
-{% block head %}{% if hero_img %}<meta property="og:image" content="{{ hero_img.og }}">{% endif %}{% endblock %}
+{% block og_image %}{% if static_has('img/share.jpg') %}{{ super() }}{% elif hero_img %}<meta property="og:image" content="{{ hero_img.og }}">{% endif %}{% endblock %}
 {% block main %}
 {% if hero_img %}
 <figure class="hero" style="{{ ph(hero_img) }}--ar:{{ '%.4f' % hero_img.ar }}">

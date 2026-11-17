@@ -72,7 +72,8 @@ class Site:
         self.env.globals.update(site=config.site, target=self.target, static=self.static,
                                 img=self.img, nav=self.nav_items, fmt_date=fmt_date,
                                 placeholder=config.images.placeholder,
-                                logo=lambda: self.logo, turnstile_action=TURNSTILE_ACTION)
+                                logo=lambda: self.logo, turnstile_action=TURNSTILE_ACTION,
+                                absolute=self.absolute, static_has=lambda n: n in self.static_urls)
         self.pages: list[tuple[str, Path]] = []     # (url, file) for sitemap
         self.written: set[Path] = set()             # every output file this build produced
         self.canonical_urls: list[str] = []
@@ -179,7 +180,7 @@ class Site:
             self.canonical_urls.append(url)
 
     def copy_static(self, out: Path) -> None:
-        """Copy static/ with a content hash in css/js/png/svg names (cache forever)."""
+        """Copy static/ with a content hash in css/js/png/svg/jpg names (cache forever)."""
         src_root = ROOT / "static"
         for f in sorted(src_root.rglob("*")):
             if not f.is_file() or f.name.startswith("."):
@@ -187,7 +188,7 @@ class Site:
             rel = f.relative_to(src_root).as_posix()
             if rel.startswith("root/"):
                 dest_rel = rel[len("root/"):]          # favicon.ico etc. at site root
-            elif f.suffix in (".css", ".js", ".png", ".svg"):
+            elif f.suffix in (".css", ".js", ".png", ".svg", ".jpg"):
                 h = hashlib.sha256(f.read_bytes()).hexdigest()[:8]
                 stem = rel.rsplit(".", 1)[0]
                 dest_rel = f"static/{stem}.{h}{f.suffix}"

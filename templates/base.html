@@ -13,6 +13,17 @@
 <link rel="icon" href="/favicon.ico" sizes="48x48">
 <link rel="icon" href="{{ static('favicon.svg') }}" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+{% set page_title = title if title is defined and title else site.title %}
+<meta property="og:site_name" content="{{ site.title }}">
+<meta property="og:type" content="website">
+<meta property="og:title" content="{{ page_title }}">
+<meta property="og:url" content="{{ canonical }}">
+{% block og_image %}{% if static_has('img/share.jpg') %}
+<meta property="og:image" content="{{ absolute(static('img/share.jpg')) }}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+{% endif %}{% endblock %}
+<meta name="twitter:card" content="summary_large_image">
 {% block head %}{% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}">
