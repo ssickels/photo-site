@@ -173,6 +173,10 @@ lines for things worth knowing (a collection that needs republishing).
 
   The build converts it to sRGB, removes all metadata (GPS included) and
   makes resized WebP and JPEG versions.
+- **Maps (and other embeds):** paste the `<iframe>` snippet (Google Maps:
+  Share → Embed a map) on a line of its own in any `.md` file, trips included.
+  The page shows a "Show map" placeholder of the same shape; nothing is loaded
+  from Google until the visitor clicks it (`photosite/embeds.py`).
 - **Contact form:** see below.
 - **Look:** one stylesheet, `static/css/site.css`; colors, fonts and spacing are
   custom properties at the top. Templates are Jinja2, in `templates/`.
@@ -239,6 +243,37 @@ the message to you with the visitor's address as Reply-To.
 - Staging messages have `[staging]` at the start of the subject.
 - Without JavaScript the form still posts, and the visitor is sent back to the
   page.
+
+## Redirects from an old site
+
+`content/redirects.tsv` lists old addresses and where they should go now; the
+build turns it into permanent (301) redirects in `.htaccess`, so links from
+search engines, other sites and your blog keep working. One entry per line,
+separated by tabs, with an optional note:
+
+```
+/p/print-options    /prints/
+G0000jF3mcceoYuo    theme:landscapes          old gallery
+I0000EZyu_XxX.6I    photo:20130712-_MG_4216~  old image page
+```
+
+- **Left:** an exact old path, or an id from the old addresses (matched as a
+  whole part of the address, wherever it appears: PhotoShelter's
+  `/portfolio/<collection>/<gallery>/<image>` and `/image/<image>` both match
+  the image id). Image ids are tried before gallery ids, gallery before
+  collection, so an image address still lands on its photo.
+- **Right:** `photo:<file name stem>`, `theme:<slug>`, `location:<gallery slug>`,
+  or a path on the new site. Photos and galleries are named rather than their
+  URLs, so the redirect follows a photo to its new theme. A target that's no
+  longer on the site sends visitors to the home page, with a build warning.
+- Anything else under the old PhotoShelter sections (`/image/`, `/gallery/`,
+  `/portfolio/` …) goes to the home page rather than a 404.
+- Addresses with `#!` in them (very old PhotoShelter links) can't be
+  redirected: the part after `#` never reaches the server.
+
+`tools/photoshelter_map.py` wrote the first version from PhotoShelter's sitemap
+and the PhotoShelter links found in the blog (both saved in
+`content/photoshelter/`), matching images to photos by file name.
 
 ## How it works
 

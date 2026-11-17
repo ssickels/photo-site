@@ -22,6 +22,7 @@ from xml.sax.saxutils import escape
 import markdown
 from jinja2 import Environment, FileSystemLoader, StrictUndefined, select_autoescape
 
+from . import embeds, redirects
 from .config import Config
 from .images import derivative_key, render_photo
 from .trips import load_trips
@@ -93,6 +94,22 @@ class Site:
     def canonical_photo_url(self, p: Photo) -> str:
         return f"{self.theme_url(p.canonical_theme)}{p.id}/"
 
+    def redirect_target(self, target: str) -> str | None:
+        """A content/redirects.tsv target -> site path (None if it isn't on the site)."""
+        kind, _, value = target.partition(":")
+        if target.startswith("/"):
+            return target
+        if kind == "photo":
+            p = next((p for p in self.catalog.photos.values() if value in (p.stem, p.id)), None)
+            return self.canonical_photo_url(p) if p else None
+        if kind == "theme":
+            t = next((t for t in self.catalog.themes if value in (t.slug, t.name.lower())), None)
+            return self.theme_url(t) if t else None
+        if kind == "location":
+            g = next((g for g in self.catalog.galleries if value in (g.slug, g.name.lower())), None)
+            return self.gallery_url(g) if g else None
+        return None
+
     def absolute(self, url: str) -> str:
         return self.target["base_url"] + url
 
@@ -153,6 +170,8 @@ class Site:
         canonical = canonical or url
         html = self.env.get_template(template).render(
             url=url, canonical=self.absolute(canonical), **ctx)
+        if "data-embed=" in html:                  # a click-to-load embed: add its script
+            html = html.replace("</body>", f'<script src="{self.static("js/embed.js")}" defer></script>\n</body>', 1)
         rel = url.strip("/")
         path = out / rel / "index.html" if not rel.endswith(".html") else out / rel
         self.put_text(path, html)
@@ -419,19 +438,22 @@ class Site:
             "AddType image/webp .webp",
             "",
         ]
-        if host:
-            esc = re.escape(host)
-            lines += [
-                f"# One address for the site: {base}",
-                "<IfModule mod_rewrite.c>",
-                "  RewriteEngine On",
-                "  RewriteCond %{HTTPS} !=on [OR]",
-                f"  RewriteCond %{{HTTP_HOST}} !^{esc}$ [NC]",
-                "  RewriteCond %{REQUEST_URI} !^/\\.well-known/",
-                f"  RewriteRule ^ {base}%{{REQUEST_URI}} [R=301,L]",
-                "</IfModule>",
-                "",
-            ]
+        old = redirects.rules(redirects.load(self.config.content_dir / "redirects.tsv"),
+                              self.redirect_target, base, "content/redirects.tsv",
+                              self.catalog.warnings)
+        if host or old:
+            # Old addresses first, straight to the new page's full address: one hop.
+            lines += ["<IfModule mod_rewrite.c>", "  RewriteEngine On", *old]
+            if host:
+                esc = re.escape(host)
+                lines += [
+                    f"  # One address for the site: {base}",
+                    "  RewriteCond %{HTTPS} !=on [OR]",
+                    f"  RewriteCond %{{HTTP_HOST}} !^{esc}$ [NC]",
+                    "  RewriteCond %{REQUEST_URI} !^/\\.well-known/",
+                    f"  RewriteRule ^ {base}%{{REQUEST_URI}} [R=301,L]",
+                ]
+            lines += ["</IfModule>", ""]
         lines += [
             "<IfModule mod_headers.c>",
             "  # img/ and static/ file names contain a hash of their content: cache forever",
@@ -489,4 +511,4 @@ def render_markdown(text: str) -> tuple[str, str]:
         if line.strip():
             break
     body = markdown.markdown("\n".join(lines), extensions=["extra", "smarty"])
-    return title, body
+    return title, embeds.click_to_load(body)

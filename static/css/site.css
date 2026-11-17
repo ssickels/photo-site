@@ -244,6 +244,14 @@ h1, h2, h3 { font-weight: 500; line-height: 1.25; }
 .page-photo figcaption { margin-top: 0.6rem; text-align: center; color: var(--muted); font-size: var(--small); }
 .page-photo figcaption a { color: inherit; }
 
+/* Click-to-load embeds (maps): a placeholder until the visitor asks for it */
+.embed { margin: 2rem 0; aspect-ratio: var(--embed-ar, 4 / 3); max-height: 80vh; background: var(--tile-bg); border: 1px solid var(--line); }
+.embed iframe { display: block; width: 100%; height: 100%; border: 0; }
+.embed-load { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.4rem; height: 100%; text-decoration: none; color: var(--fg); }
+.embed-label { padding: 0.5rem 1.1rem; border: 1px solid var(--muted); border-radius: 999px; font-weight: 600; }
+.embed-load:hover .embed-label { background: var(--fg); color: var(--bg); }
+.embed-note { color: var(--muted); font-size: var(--small); }
+
 /* Contact form */
 .contact-form { display: grid; gap: 0.3rem; margin-top: 1.5rem; }
 .contact-form[hidden] { display: none; }

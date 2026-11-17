@@ -1,0 +1,471 @@
+# Old PhotoShelter address -> new page. Written by tools/photoshelter_map.py,
+# then edit freely. Left column: a PhotoShelter id (I... image, G... gallery,
+# C... collection; matched anywhere in the old address) or an exact old path.
+# Right column: photo:<file name stem>, theme:<slug>, location:<gallery slug>,
+# or a path on the new site. Optional third column: a note.
+
+# --- pages
+/index	/
+/archive	/
+/search-page	/
+/gallery-list	/themes/
+/p/print-options	/prints/
+/p/contact	/contact/
+
+# --- collections and galleries
+C0000wOSyQBHuCBA	/themes/	Portfolio by Theme
+C0000VInEPX_018w	/locations/	Portfolio by Location
+G00005MNCz1xoRgg	theme:black-white	Black and White
+G0000iYUDB8M6Dug	theme:details	Details
+G0000HnQxoIoDSTw	/themes/	Eclipse (not on the new site)
+G0000jF3mcceoYuo	theme:landscapes	Landscapes and Coastlines
+G0000UJnGqItsJF8	theme:landscapes	Long Exposure
+G0000bMWFjPcjwbU	theme:music	Music
+G0000e3oAPU57keY	theme:plants-and-flowers	Plants and Flowers
+G0000MxBZJ2MiGbE	theme:landscapes	Rivers, Streams, and Waterfalls
+G0000o9cfAm6WuZ4	theme:the-built-environment	The Built Environment
+G0000Oo3cxN0LmTY	theme:wildlife	Wildlife
+G0000om2O9xeh7Us	theme:architectural-photography	Architectural Photography
+G0000egn0fHxs0V4	/	Recent Additions
+G0000Q7.l6PB_r5o	location:california	California
+G0000dP71E4odEPI	location:canada	Canada
+G0000EoEVO7xpJaE	location:florida	Florida
+G0000nGm3XpHQ_98	location:iceland	Iceland
+G0000hhW3uImZ_j0	location:italy	Italy
+G0000Nl_XKfOAOHI	location:maine	Maine
+G0000ibj6psGULdE	location:scotland	Scotland
+G0000J3Ix12l8IAw	location:tennessee	Smoky Mountains
+G0000CJ4.DWWUHFk	location:virginia	Virginia
+G00006BmAwYlT18g	location:washington-d-c	Washington D.C.
+G0000TuoOdL7a5Sc	location:norway	Norway (linked from the Amazing Auroras post)
+G0000PJFYcBOQuzE	location:scotland	Scotland (linked from the Scotland posts)
+G00001likCWqCztY	location:usa-maine-mt-desert-island-acadia-national-park	unnamed gallery; 1 of its images' captions name Acadia National Park
+G00005q8r9L.N0Wg	location:usa-california-garrapata-state-park	unnamed gallery; 1 of its 1 known photos are in Garrapata State Park
+G00009e3KiLk8j5k	location:canada-ontario-mcgregor-bay	unnamed gallery; 4 of its 4 known photos are in Mcgregor Bay
+G0000Ku10cMb3PBU	location:south-america-argentina-iguazu	unnamed gallery; 2 of its 2 known photos are in Iguazu
+G0000PLfs5rEbEWg	location:usa-virginia-great-falls	unnamed gallery; 3 of its 3 known photos are in Great Falls
+G0000PSLQsptkK68	location:maryland	unnamed gallery; 2 of its 2 known photos are in Maryland
+G0000XQpUBhsyHFI	/	unnamed gallery; no known photos
+G0000bI5OaXBlD18	location:iceland	unnamed gallery; 1 of its images' captions name Iceland
+G0000ejXAEDNOEd0	/	unnamed gallery; no known photos
+G0000nIr0AY8WFYE	location:usa-washington-d-c-national-air-and-space-museum	unnamed gallery; 1 of its 1 known photos are in National Air and Space Museum
+
+# --- images
+I0000dnU7IAQcxps	/	not on the new site (no match) · DSC7216.jpg · _DSC7216.jpg
+I0000EZyu_XxX.6I	photo:20130712-_MG_4216~	MG-4216.jpg · Paul McCartney
+I0000PE6XbBcv8DI	location:usa-maine-mt-desert-island-acadia-national-park	not on the new site (caption names Acadia National Park) · MG-1296.jpg · Orange and Green
+I0000J.9gkf_Xdvc	photo:20170320-DSC02119-Edit~	DSC02119-Edit.jpg · The Bartlett, from the NW
+I0000zyKT6vU_49M	photo:20131103-_MG_6307-Edit~	MG-6307-Edit.jpg · Washington Monument, Reflected
+I0000B0DmxEu04r4	photo:20140326-_MG_6954-Edit~	MG-6954-Edit.jpg · Falls on the Road to Applecross
+I0000gcHrHLwJRWk	photo:20170210-DSC01655-Edit~	DSC01655-Edit.jpg · Curve
+I0000E8JTlcIgkaU	photo:20200411-DSC05145~Copyright 2020	DSC05145.jpg · Azalea
+I0000byU8OhTwo4M	photo:20140325-_MG_6795-Edit-2~	MG-6795-Edit-2.jpg · First Light
+I0000XLxqLuw1jQ8	photo:20140325-_MG_6913-Edit-Edit~	MG-6913-Edit-Edit.jpg · Neist Point
+I0000fAIJfyN6uGk	photo:20130907-_MG_5731-Edit_v2_no_border~	MG-5731-Edit-v2-no-border.jpg · Cascades
+I0000Yz3WlASw4PE	photo:20130917-_MG_6233-Edit~Copy 1	MG-6233-Edit.jpg · _MG_6233-Edit.jpg
+I0000QTKWLqxlsEg	photo:20210531-DSC06839-Edit~Copyright 2021	DSC06839-Edit.jpg · Blossom
+I0000aMyU0wO0hPM	photo:20160805-DSC00577-Edit~Copy 1	DSC00577-Edit.jpg · DSC00577-Edit.jpg
+I00008XyxC07nyCI	photo:20160806-DSC00658-Edit~Copy 1	DSC00658-Edit.jpg · DSC00658-Edit.jpg
+I0000R0Go9P7JcQ4	photo:20160318-_MG_1977-Edit-2~	MG-1977-Edit-2.jpg · Mosque
+I0000k94c92pJZSg	photo:20150606-_MG_7607-Edit~	MG-7607-Edit.jpg · _MG_7607-Edit.jpg
+I0000XCaScHHjNp4	photo:20160520-DSC00197-Edit~	DSC00197-Edit.jpg · Three Rocks, and Falls
+I0000I3QS6GtTo1o	photo:20130531-_MG_5129-Edit~	MG-5129-Edit.jpg · Iris
+I0000colZoWz.3aQ	photo:20130513-13-05-19_112910_M=B_R=8_S=4-Edit-Edit~	13-05-19-112910-M-B-R-8-S-4-Edit-Edit.jpg · Lichen on Rocks
+I0000ve7BhyUsTns	photo:20161026-DSC01218-2-Edit~Copyright 2016	DSC01218-2-Edit.jpg · Fall
+I00001qEpACifGfc	photo:20150320-_MG_0386-Edit~	MG-0386-Edit.jpg · Glacial Valley
+I00000vvwfiFg36s	photo:20140327-_MG_7167-Edit~Copyright 2016	MG-7167-Edit.jpg · Assynt
+I0000Yal.hyhvET4	photo:20140326-_MG_7018~	MG-7018.jpg · Torridon Sunset
+I00009BtagFeIZCs	photo:20191011-DSC04912~	DSC04912.jpg · Calm
+I0000L3OX0Z4OBII	photo:20191011-DSC04889-Edit~	DSC04889-Edit.jpg · Contrail
+I0000Pmz_.Lj317I	photo:20181016-DSC00252-Edit~	DSC00252-Edit.jpg · Queenstown
+I0000i2qhlr1mMwE	photo:20181010-DSC09595-Edit~	DSC09595-Edit.jpg · Steam and Rocks
+I0000q7dyYHM9jzQ	photo:20181010-DSC09584-Edit~	DSC09584-Edit.jpg · Warm mist
+I0000df6_36NJw5Q	photo:20180612-DSC08411-Edit~	DSC08411-Edit.jpg · Last Light
+I00002TPS4MwXBSY	photo:20150731-IMG_8308~	IMG-8308.jpg · Storm
+I0000cS6k9wIQB8k	photo:20170623-DSC03920-Edit~	DSC03920-Edit.jpg · "S"
+I0000qtm7sI5pAGU	photo:20160610-DSC00268~	DSC00268.jpg · Redwood Light
+I0000VbunxiZEp_s	photo:20160312-_MG_0682~Copy 1	MG-0682.jpg · _MG_0682.jpg
+I0000ZHow9PSXD0U	photo:20151015-_MG_8784~	MG-8784.jpg · Yellow Stripe
+I0000197y.Z_oSPc	photo:20150319-_MG_0319-Edit~	MG-0319-Edit.jpg · Cape Horn
+I0000vgVQN8.f1_M	photo:20121027-_MG_2025~	MG-2025.jpg · Mountains, Layers
+I0000EovpQEGFyL8	photo:20120720-_MG_0149-Edit~	MG-0149-Edit.jpg · Blue Ice on the Black Beach - Iceland
+I0000WAiE0Q.NtHc	photo:20120719-_MG_9730~	MG-9730.jpg · Twilight Sea Stacks
+I0000nVqFooS6E2Q	photo:20161028-DSC01297-Edit~	DSC01297-Edit.jpg · Rocks at Achnahaird
+I0000A01arRwvFHE	photo:20160702-_MG_7287-Edit~	MG-7287-Edit.jpg · Encore
+I0000L8eyHCYkPiE	theme:music	not on the new site (hint trombone shorty|concert|festival) · MG-3235.jpg · Trombone Shorty
+I0000K9BEpeJB1UA	photo:20200411-DSC05185~	DSC05185.jpg · Young and Old
+I0000DIZXLkOuqXg	photo:20130427-_MG_3657~	MG-3657.jpg · Azalea in the Sun
+I0000njXTMypfZbE	photo:20150508-_MG_7402~	MG-7402.jpg · Stars
+I0000blUU8QeKtfA	photo:20150418-_MG_7196~	MG-7196.jpg · Magnolia
+I0000K5RM_ix5CxM	photo:20110522-IMG_6340~	IMG-6340.jpg · Iris, Opening
+I0000uHUpQ8LyCX4	photo:20100522-IMG_1561~	IMG-1561.jpg · Yellow on Blue on Green
+I0000Qg_pd_RqgRE	photo:20060417-file_2850-~	file-2850.jpg · Azalea after a Spring Rain
+I0000Pajl.bcFzw0	photo:20210520-DSC06750~Copyright 2021	DSC06750.jpg · Window
+I0000wpwSE6GZVLI	location:iceland	not on the new site (caption names Iceland) · IMG-8839.jpg · Grundarfoss, Iceland
+I0000ExEO1QIszIM	photo:20160318-_MG_1962-Edit~	MG-1962-Edit.jpg · Bath
+I0000trYgDDLbZXU	location:canada-ontario-mcgregor-bay	not on the new site (caption names Mcgregor Bay) · DSC09044-Edit.jpg · Points East
+I0000iTW2fheOeU8	photo:20150801-_MG_8422-Edit~	MG-8422-Edit.jpg · Niagara
+I0000zpEG6aKpz_M	photo:20150730-_MG_8273-Edit~	MG-8273-Edit.jpg · The Blue Hour
+I0000xMtNPYq91mg	photo:20130513-_MG_4210~	MG-4210.jpg · Garrapata Shore
+I0000YrsqVlkh9GY	photo:20130513-_MG_4189~	MG-4189.jpg · Garrapata Sea Stacks
+I0000U2yKQBh4oLo	/	not on the new site (no match) · DSC06621-Edit.jpg · DSC06621-Edit.jpg
+I00002Zm.Ot20fdM	photo:20160701-_MG_6979~	MG-6979.jpg · Red-winged Blackbird
+I0000ui7_fnOusZA	photo:20060507-file_4508--Edit~	file-4508-Edit.jpg · Colorful Gaze
+I00009CFr5QMq3IA	photo:20100615-IMG_2914~	IMG-2914.jpg · Sparrow
+I00005qyJK.DadIg	photo:20220824-_DSC8903-Edit~	DSC8903-Edit.jpg · Yellow
+I0000UfefTiHU2Lk	photo:20121008-_MG_1019~	MG-1019.jpg · Jordan Pond Sunset
+I0000eIHe1AJ_uXs	photo:20121010-_MG_1285~	MG-1285.jpg · Orange and White
+I0000SqaYn2rfl7w	photo:20121010-_MG_1322~	MG-1322.jpg · Marsh Grass & Trees
+I0000cKgL4cZCv1g	location:usa-maine-mt-desert-island-acadia-national-park-pretty-marsh	not on the new site (caption names Pretty Marsh) · MG-1350.jpg · Moss Shapes
+I0000XPpq79U08X4	photo:20170919-DSC06025~Copyright 2017	DSC06025.jpg · Birches
+I0000R6KEuwFucOc	photo:20121012-_MG_1529~Copy 1	MG-1529.jpg · Before Sunrise
+I0000pVCUtDG0SJQ	photo:20121012-_MG_1632~	MG-1632.jpg · Boulder Beach Glow
+I0000uwxgOkocPBE	photo:20151016-_MG_8809~	MG-8809.jpg · Aspens
+I0000mrl88UV031A	photo:20190812-DSC03595-Edit~	DSC03595-Edit.jpg · Hippo
+I0000Het4QgB_Ji8	photo:20130629-_MG_3021~	MG-3021.jpg · Mingo Fishtrap
+I0000Iezlk4yCBDc	photo:20130629-_MG_3125~Copy 1	MG-3125.jpg · Trombone Shorty
+I0000h11QsLHCdW8	photo:20211017-_DSC7291-Edit~Copyright 2021	DSC7291-Edit.jpg · Fall View
+I0000KD2etnkQz78	photo:20170320-DSC02184~	DSC02184.jpg · The Bartlett, Courtyard Detail
+I0000G9Up0g0KcbY	location:africa-southern-africa-south-africa	not on the new site (caption names South Africa) · DSC03080.jpg · Three
+I0000YYdwpjcddEw	photo:20140325-_MG_6899-Edit~	MG-6899-Edit.jpg · Skye Rocks
+I0000bqREKx6RBbc	photo:20130629-_MG_3133~	MG-3133.jpg · Trombone Shorty
+I0000s6wQcn5On0s	location:usa-new-york-adirondacks	not on the new site (caption names Adirondacks) · DSC7177.jpg · Splashes
+I0000UWeFAdKZDVU	photo:20160806-DSC00658-Edit~Copy 1	DSC00658-Edit.jpg · DSC00658-Edit.jpg
+I0000xylj0xSKkHY	photo:20080407-IMG_7137~Copy 1	IMG-7137.jpg · The Duomo
+I00006MWefe5u6iQ	photo:20100606-IMG_9890-Edit~	IMG-9890-Edit.jpg · Young Seal
+I0000OMOu5E.ovL4	photo:20180421-DSC07380-Edit~	DSC07380-Edit.jpg · Cone
+I0000pWpVTbuqwQA	photo:20170919-DSC05981-Edit~	DSC05981-Edit.jpg · Roots
+I0000MJ4RFpxWLB0	photo:20131116-_MG_6409-Edit~	MG-6409-Edit.jpg · Symmetry
+I00004zQlNhjJMtw	photo:20080404-IMG_6724~	IMG-6724.jpg · Abstract tiles
+I0000iUvyMG6dQgw	theme:wildlife	not on the new site (hint steenbok|elephant|yawn|penguin|weaver|toucan|reindeer|wood duck) · DSC04080-Edit.jpg · Steenbok
+I0000jnIlMDMtZac	photo:20121011-_MG_1362-Edit~	MG-1362-Edit.jpg · Morning on Cadillac Mountain
+I0000oWYBy9l2AWA	photo:20140323-_MG_6632-Edit~	MG-6632-Edit.jpg · Sunset
+I0000Urt.4n6oTN4	photo:20130629-_MG_3364~	MG-3364.jpg · Dwayne Dopsie & the Zydeco Hellraisers
+I0000AsZOzmup6TM	photo:20130629-_MG_3378~	MG-3378.jpg · Dwayne Dopsie & the Zydeco Hellraisers
+I0000H_9xUfKXUL0	photo:20130629-_MG_3439~	MG-3439.jpg · Dwayne Dopsie & the Zydeco Hellraisers
+I0000eIMIKBFlMOM	photo:20130629-_MG_3459~	MG-3459.jpg · Dwayne Dopsie & the Zydeco Hellraisers
+I0000tbdN3IFEkCg	photo:20130629-_MG_3455~	MG-3455.jpg · Dwayne Dopsie & the Zydeco Hellraisers
+I0000q4UGyDul0O4	photo:20130712-_MG_3614~	MG-3614.jpg · Paul McCartney
+I0000lfMmjZ1lFrY	photo:20130712-_MG_3630~	MG-3630.jpg · Paul McCartney
+I0000PVlcTpTGu3Y	photo:20130712-_MG_3899~	MG-3899.jpg · Paul McCartney
+I0000eZwGdX2N9yE	photo:20130712-_MG_3922~	MG-3922.jpg · Paul McCartney
+I0000Dd_YtYrP.Gw	photo:20130712-_MG_4172~	MG-4172.jpg · Paul McCartney
+I0000pSAU34AbSNU	photo:20131103-_MG_6291~	MG-6291.jpg · Fall Leaves
+I0000xjWmdMTD038	photo:20131116-_MG_6402~	MG-6402.jpg · Linear
+I0000kghq8eUxJzE	photo:20211018-_DSC7357-Edit~Copyright 2021	DSC7357-Edit.jpg · Mixing
+I0000IUBjAdl95X4	photo:20190822-DSC04548~	DSC04548.jpg · Two Lions
+I0000yqZ4G_zYXh4	location:iceland	not on the new site (caption names Iceland) · MG-9773.jpg · Waterfall, Iceland
+I0000.KOj_DmBk90	photo:20140326-_MG_6949-Edit~	MG-6949-Edit.jpg · Protrusion
+I0000SIixO.f7fZ8	photo:20130501-_MG_3940~	MG-3940.jpg · Geranium
+I0000_2nITvVDnHE	theme:music	not on the new site (hint trombone shorty|concert|festival) · MG-3107.jpg · Trombone Shorty
+I00007EvRqLUDFHU	location:tennessee	not on the new site (hint smok(y|ies)) · MG-2253.jpg · Sunset
+I00006i07vympTrs	photo:20140327-_MG_7201-Edit~Copy 1	MG-7201-Edit.jpg · Sunset
+I0000adVXOBUfdvs	photo:20190819-DSC04386-Edit~	DSC04386-Edit.jpg · Stalking...
+I0000qVHApQuBDi4	photo:20150508-_MG_7360-Edit~	MG-7360-Edit.jpg · May Apple
+I0000fWGQnSmqx3M	photo:20121202-_MG_2720-Edit~	MG-2720-Edit.jpg · Among the Berries
+I0000Pm.VexYz428	/themes/	not on the new site (hint eclipse|corona|diamond ring) · DSC05241-Edit-2.jpg · Eclipse
+I0000dRPpejPMiN0	location:maryland	not on the new site (its old gallery) · MG-8643-Edit.jpg · Pothole
+I00002bNAzksORmo	photo:20110421-IMG_6046-Edit-Edit~	IMG-6046-Edit-Edit.jpg · Stately Tree in Cade's Cove
+I00006jnqr0On2d8	location:tennessee	not on the new site (hint smok(y|ies)) · IMG-5751.jpg · Sunrise in the Smokies
+I0000maRvydbntlE	location:tennessee	not on the new site (hint smok(y|ies)) · IMG-5320.jpg · Abstraction in the Smokies
+I0000fMOJgZ7FjlU	theme:wildlife	not on the new site (hint steenbok|elephant|yawn|penguin|weaver|toucan|reindeer|wood duck) · DSC03498-Edit-2.jpg · Elephants Crossing
+I00006cLPXpO8lrE	location:tennessee	not on the new site (hint smok(y|ies)) · IMG-5436-Edit.jpg · Smoky Mountains Stream
+I0000Q7cX_pm7Rcw	/themes/	not on the new site (hint eclipse|corona|diamond ring) · DSC05241-Edit.jpg · Eclipse, Cropped
+I0000T85pIrzeDBo	photo:20171105-DSC06584-Edit-2~	DSC06584-Edit-2.jpg · Two
+I0000yozliWa4hRQ	photo:20180810-DSC09061~Copyright 2018	DSC09061.jpg · Rocks
+I0000YiXj4yqn7bE	photo:20160805-DSC00606~Copy 1	DSC00606.jpg · DSC00606.jpg
+I0000R83cg161J24	photo:20190629-DSC02558~	DSC02558.jpg · Cha Wa
+I0000TelVyhRsX3A	photo:20130629-_MG_3320~	MG-3320.jpg · Trombone Shorty
+I0000Fy6zCtvXY2Y	photo:20130629-_MG_3309~	MG-3309.jpg · Trombone Shorty
+I0000MstgWa.ZXg4	photo:20130629-_MG_2933~	MG-2933.jpg · Mingo Fishtrap
+I0000V2OdCOtNwsI	location:tennessee	not on the new site (hint smok(y|ies)) · IMG-5873-Edit.jpg · Smoky Mountains Falls
+I00001dpSWGawa7c	photo:20111127-IMG_7917~	IMG-7917.jpg · Neon Twilight, Miami Beach, Florida
+I0000i4y4MWpKteY	photo:20150605-_MG_7560~	MG-7560.jpg · Red Door
+I0000LxRlOtmX3Pc	/	not on the new site (no match) · MG-8671-Edit.jpg · Decay
+I00000raTy7u5cvA	photo:20090425-IMG_6501~	IMG-6501.jpg · Sunset Eye
+I0000B..y1EPXCCE	photo:20170210-DSC01630-Edit~Gentle Colors	DSC01630-Edit.jpg · DSC01630-Edit.jpg
+I0000JFuxRnxmtTo	photo:20200411-DSC05180-Edit~Copyright 2020	DSC05180-Edit.jpg · Fothergilla
+I0000LKtswHL1wwc	photo:20090525-IMG_0165-Edit-Edit~	IMG-0165-Edit-Edit.jpg · White Iris
+I0000p6uEKwHMpEw	photo:20180611-DSC08281-Edit~	DSC08281-Edit.jpg · Splash
+I0000TnqqpNGmnVw	photo:20190522-DSC02149-Edit-Edit~	DSC02149-Edit-Edit.jpg · Iris
+I0000NrxYdDb.jXs	photo:20130629-_MG_2923~	MG-2923.jpg · Mingo Fishtrap
+I0000MFgM_OuQYvM	location:maine	not on the new site (caption names Maine) · MG-0887-Edit.jpg · Sunrise
+I0000N65UgBAQPu8	photo:20121012-_MG_1647~	MG-1647.jpg · Red Maple
+I0000FArZOmIcOW8	photo:20170914-DSC05734~Copyright 2017	DSC05734.jpg · Marsh
+I00007nIaz34HZVE	photo:20170916-DSC05759-Edit~Copyright 2017	DSC05759-Edit.jpg · LIghthouse
+I0000T.01qCORu58	photo:20170916-DSC05800~Copyright 2017	DSC05800.jpg · Low Tide
+I0000LUCPGgZYVIM	photo:20170917-DSC05888~Copyright 2017	DSC05888.jpg · DSC05888.jpg
+I00009TX6C2GXIxE	photo:20170917-DSC05908~Copyright 2017	DSC05908.jpg · DSC05908.jpg
+I00004_fpeCF_5S4	photo:20170918-DSC05950~Copyright 2017	DSC05950.jpg · Rocks and Fog
+I0000lXFKSTlVsiU	photo:20170918-DSC05963~Copyright 2017	DSC05963.jpg · Cliff and Waves
+I00003T5KS.nfypI	photo:20170919-DSC06044~Copyright 2017	DSC06044.jpg · Green
+I0000xAaZiWLGbq8	photo:20170919-DSC06080-Edit~Copyright 2017	DSC06080-Edit.jpg · Flow and Fog
+I0000tf.hsnL_OF4	photo:20170920-DSC06106-Edit~Copyright 2017	DSC06106-Edit.jpg · Restless Ocean
+I0000PqJRhYIrrPk	photo:20170920-DSC06094~Copyright 2017	DSC06094.jpg · Wave
+I0000wMdvEmWdGYg	photo:20221001-_DSC9119-Edit~Copyright 2022	DSC9119-Edit.jpg · Tree
+I0000pKcxDNzZn4M	photo:20221003-_DSC9186-Edit~	DSC9186-Edit.jpg · Glow
+I0000xyg856XkCsU	photo:20221001-_DSC9127-Edit~Copyright 2022	DSC9127-Edit.jpg · Boathouse
+I00008J3i2wzZ5gU	location:usa-maine-mt-desert-island-acadia-national-park-pretty-marsh	not on the new site (caption names Pretty Marsh) · DSC9266-Edit.jpg · Path
+I0000IWTLwY5VRHs	photo:20221004-_DSC9278~Copyright 2022	DSC9278.jpg · Motion
+I0000mTetwG9ovOU	photo:20221010-_DSC9646~Copyright 2022	DSC9646.jpg · Morning Light
+I00000mXkOfjJ3gE	photo:20221010-_DSC9652~Copyright 2022	DSC9652.jpg · Early Morning Light
+I0000yVLcIMJLPJw	photo:20221011-_DSC9737~Copyright 2022	DSC9737.jpg · First Sun
+I0000hhtMcn8SbqQ	photo:20221012-_DSC9875-Edit-Edit~Copyright 2022	DSC9875-Edit-Edit.jpg · Morning Light and Fog
+I0000agheUTRqNAQ	photo:20221013-_DSC0004~Copyright 2022	DSC0004.jpg · Colors
+I0000O2Oih_rDGBU	photo:20221013-_DSC0044-Edit~Copyright 2022	DSC0044-Edit.jpg · Tenacity
+I0000hSbhS6HAcY8	photo:20121026-_MG_1787~	MG-1787.jpg · S-Curve
+I0000CmDOuVc0fl4	photo:20121010-_MG_1224-Edit~	MG-1224-Edit.jpg · Details
+I0000_0T0tMd8kHY	photo:20100607-IMG_0027~	IMG-0027.jpg · Ice Blue
+I0000vHdpmXGGEAY	photo:20140326-_MG_6955-Edit~Copy 3	MG-6955-Edit.jpg · _MG_6955-Edit.jpg
+I00004qYFxH48K5s	location:iceland	not on the new site (caption names Iceland) · IMG-8789.jpg · Grundarfoss, Iceland
+I0000z.wQoCrpFgI	location:iceland	not on the new site (caption names Iceland) · IMG-8896-Edit.jpg · Kirkjufell
+I0000FWHRJqAvpD8	location:usa-maine-mt-desert-island-acadia-national-park	not on the new site (caption names Acadia National Park) · MG-1440.jpg · Kebo Brook
+I0000QyCmI.QRM7I	location:usa-maine-mt-desert-island-acadia-national-park	not on the new site (its old gallery) · MG-1471.jpg · The Drop
+I0000TNEOP5ejpFE	/	not on the new site (no match) · DSC06361-Edit.jpg · DSC06361-Edit.jpg
+I0000rarTfxLEDzA	location:usa-new-york-adirondacks	not on the new site (caption names Adirondacks) · DSC7253.jpg · Shoebox
+I0000zuD6gSu_DJw	location:usa-new-york-adirondacks	not on the new site (caption names Adirondacks) · DSC7182.jpg · Cascade
+I0000Nk9jzT62J.w	location:tennessee	not on the new site (hint smok(y|ies)) · MG-2094.jpg · Water Blur
+I0000SvkUib5Di7Y	photo:20140413-_MG_7266-Edit~	MG-7266-Edit.jpg · _MG_7266-Edit.jpg
+I0000zME4us6_aPo	photo:20140413-_MG_7333-Edit~	MG-7333-Edit.jpg · Cherry Blossoms, Jefferson Memorial
+I0000.yyCTd1u2AU	location:tennessee	not on the new site (hint smok(y|ies)) · MG-1865.jpg · Branches, Color
+I00008cKU57KAO80	location:tennessee	not on the new site (hint smok(y|ies)) · IMG-5669-Edit.jpg · Smoky Mountains Falls
+I0000i12krEOkBXA	photo:20121026-_MG_1807~	MG-1807.jpg · Cloudburst
+I0000ZL_alZJFuDQ	location:tennessee	not on the new site (hint smok(y|ies)) · MG-1910.jpg · Cascades
+I0000WRoEh0rLgAI	location:tennessee	not on the new site (hint smok(y|ies)) · MG-1928.jpg · Green Pool
+I0000X91UkCsDZ9E	location:iceland	not on the new site (caption names Iceland) · MG-0313.jpg · Skógafoss, Iceland
+I0000LkZegcLqslM	/	not on the new site (no match) · MG-6093.jpg · Water of Nevis
+I0000vmOzBtvHPck	photo:20150509-_MG_7488~	MG-7488.jpg · Ferns
+I0000nkkirh_K0nc	photo:20150518-_MG_7558-Edit~	MG-7558-Edit.jpg · Iris
+I00009faXlYR0rA4	location:maryland	not on the new site (its old gallery) · MG-8686.jpg · Flow
+I0000dE_zl_PHR1Q	location:usa-virginia-shenandoah-national-park-robinson-river	not on the new site (caption names Robinson River) · DSC00190-Edit.jpg · Narrow Flow
+I0000tvP3iysiPzk	photo:20200407-DSC05125~Copyright 2020	DSC05125.jpg · Bleeding Hearts
+I0000grXWZsvXYLg	photo:20200409-DSC05142~	DSC05142.jpg · Bleeding Hearts
+I0000qSww.XcpBQA	photo:20200409-DSC05137~Copyright 2020	DSC05137.jpg · Hellebore
+I0000cSMUYh.6Hoc	photo:20200412-DSC05222~Copyright 2020	DSC05222.jpg · DSC05222.jpg
+I0000syGBt23bYKM	location:virginia	not on the new site (caption names Virginia) · DSC06737.jpg · River's Edge
+I0000t.ZdU2SWoWo	photo:20220824-_DSC8897-Edit~	DSC8897-Edit.jpg · Datura
+I0000w_2ojJUYJz8	photo:20090525-IMG_0165-Edit~	IMG-0165-Edit.jpg · White Iris
+I0000orqe9_MFt4Y	location:usa-virginia-great-falls	not on the new site (its old gallery) · IMG-8366.jpg · Rose River Falls
+I0000pqyNNW.rf48	photo:20150418-_MG_7178~	MG-7178.jpg · Daffodil
+I00000AQjiCvbgYo	photo:20150418-_MG_7219~	MG-7219.jpg · Flora Friends
+I0000MNWBDsK4BXM	photo:20150508-_MG_7370~	MG-7370.jpg · Mazus and Spring Beauties
+I0000bfUoHHnld8w	photo:20151213-_MG_9112-Edit~	MG-9112-Edit.jpg · James River
+I0000YkrOc6Tojyk	location:iceland	not on the new site (caption names Iceland) · MG-0246.jpg · Svartifoss, Iceland
+I0000JMrzTivWkHo	photo:20120718-IMG_9428-Edit~	IMG-9428-Edit.jpg · Flows
+I0000flm9DruttaI	location:iceland	not on the new site (caption names Iceland) · IMG-9487.jpg · Waterfall Chasm
+I0000EyFy5El4jOg	location:iceland	not on the new site (caption names Iceland) · IMG-9514-Edit.jpg · Brúarárfoss
+I0000ogVYyGpe.vw	photo:20120720-_MG_0005-2~	MG-0005-2.jpg · Glowing Blue
+I0000PS03eqaXQq0	photo:20140327-_MG_7192-Edit~	MG-7192-Edit.jpg · Sunset, Reflected
+I0000rywVmH0v2mE	photo:20121010-_MG_1346~	MG-1346.jpg · A Bed of Moss
+I0000tHTRoBfXHLk	photo:20160701-_MG_7038~	MG-7038.jpg · _MG_7038.jpg
+I0000CFNDBYrMGK8	photo:20140626-_MG_8030~	MG-8030.jpg · Blue
+I0000eOdQDuxh2IY	location:usa-maine-mt-desert-island-acadia-national-park-otter-cliffs	not on the new site (caption names Otter Cliffs) · MG-1038.jpg · Boulder Beach B&W 1
+I0000iqyyaWkuQS0	/	not on the new site (no match) · DSC00924-Edit.jpg · DSC00924-Edit.jpg
+I0000Uv8qA1PxnvQ	photo:20160702-_MG_7290-Edit~Copy 1	MG-7290-Edit.jpg · On Trumpet
+I0000tYjJc3DFZHc	photo:20140323-_MG_6605-Edit~Copyright 2016	MG-6605-Edit.jpg · _MG_6605-Edit.jpg
+I00001m.BE76lToQ	photo:20111126-IMG_7780~	IMG-7780.jpg · Neon Twilight, Miami Beach, Florida
+I0000z0IK2AZJ45A	/	not on the new site (no match) · MG-8770-Edit.jpg · Barber's Chair
+I0000769UtNsBn1U	photo:20190822-DSC04529-Edit~	DSC04529-Edit.jpg · Sending a message
+I0000rUyO4fJWbCY	photo:20120505-IMG_8527~	IMG-8527.jpg · A Flash of Red
+I0000zLtmCagueYk	photo:20100618-IMG_4088~	IMG-4088.jpg · Fox Eyes
+I0000M44JW_RaZHk	photo:20200425-DSC05282~	DSC05282.jpg · Hosta
+I0000FpwNsURCvUg	photo:20100618-IMG_3978~Copy 1	IMG-3978.jpg · Sleep
+I0000heVLxkAmxPU	photo:20221012-_DSC9809-Edit~Copyright 2022	DSC9809-Edit.jpg · Evening Light
+I0000cyvzCTgVhOI	photo:20151015-_MG_8716-Edit~	MG-8716-Edit.jpg · Beaver Dam
+I0000OhC5_SdCRHw	photo:20130902-_MG_5503-Edit_no_border~	MG-5503-Edit-no-border.jpg · Cathedral
+I0000K3UXTNsJv6I	photo:20170608-DSC03485~Copyright 2017	DSC03485.jpg · Grass
+I0000G2M3MSBEpnM	/	not on the new site (no match) · DSC04016-Edit.jpg · Falls & Rainbow
+I0000cmT71I5J5IU	location:africa-southern-africa-south-africa	not on the new site (caption names South Africa) · DSC04371-Edit.jpg · Playful
+I0000mvLiJoH5l_M	photo:20100822-IMG_4032~	IMG-4032.jpg · Yellow!
+I0000vdHxR4Nj5Xg	photo:20150801-_MG_8422-Edit-2~	MG-8422-Edit-2.jpg · Niagara
+I0000E2sw2Vwg5oM	photo:20180224-DSC07065~	DSC07065.jpg · Fog
+I0000cN6kdFoVnoI	photo:20180805-DSC09042-Edit~	DSC09042-Edit.jpg · Lichen
+I0000TL8RXX1.8Bs	photo:20221006-_DSC9503~Copyright 2022	DSC9503.jpg · Twilight
+I0000jBZ.TOysTTM	photo:20260123-DSC07063~	DSC07063.jpg · DSC07063.jpg
+I0000BfAmYUPseME	photo:20131116-_MG_6439~	MG-6439.jpg · Reflections
+I0000PuCRNP6QIMs	photo:20211014-_DSC7225~Copyright 2021	DSC7225.jpg · Yellow Trees
+I0000Pl84dix1rrs	photo:20130629-_MG_3031~	MG-3031.jpg · Mingo Fishtrap
+I0000MqSgCFNcav4	theme:music	not on the new site (hint trombone shorty|concert|festival) · MG-3106.jpg · Trombone Shorty
+I0000KYDjFjGGgdM	photo:20130629-_MG_3128~	MG-3128.jpg · Trombone Shorty
+I0000V9U.uJSBfc4	theme:music	not on the new site (hint trombone shorty|concert|festival) · MG-3150.jpg · Trombone Shorty
+I000092rjo37u0_s	photo:20130629-_MG_3222~	MG-3222.jpg · Trombone Shorty
+I0000pQkBcd2C33s	photo:20130629-_MG_3413~	MG-3413.jpg · Dwayne Dopsie & the Zydeco Hellraisers
+I0000bbgyKOCq0h8	location:usa-new-york-adirondacks	not on the new site (caption names Adirondacks) · DSC7205.jpg · Cascade Book
+I0000Wz8vFgyebIM	/	not on the new site (no match) · DSC05423-Edit-Flatened-Recovered.jpg · Droplets
+I0000dmXyE_AY688	/	not on the new site (no match) · IMG-0504-Edit.jpg · Dusty Blue Scilla
+I0000RrmItQsWGMs	/	not on the new site (no match) · DSC05423-Edit-Flatened.jpg · Droplets
+I0000bywqYwIJrb4	photo:20120717-IMG_9108-Edit~	IMG-9108-Edit.jpg · Icelandic Horses
+I0000X4NsI7CF5jc	photo:20190819-DSC04332-Edit~	DSC04332-Edit.jpg · Lion
+I0000wPREDYKtouY	photo:20170323-DSC02359-Edit~	DSC02359-Edit.jpg · Whole Foods at Twilight
+I0000K648r1zXIgo	photo:20140425-_MG_7349-Edit~	MG-7349-Edit.jpg · Revealing the Potomac
+I0000_UYhQzTtsUU	photo:20131116-_MG_6421~	MG-6421.jpg · Branches
+I0000LqMj_5xqKWo	photo:20140325-_MG_6850-Edit~	MG-6850-Edit.jpg · Tree
+I0000Dbm7QNmwy3Q	photo:20150727-_MG_8155-Edit~	MG-8155-Edit.jpg · Reeds
+I0000KSqDmjk5jPI	photo:20160307-_MG_9623~	MG-9623.jpg · Palace
+I0000L4Vh9l7J98k	photo:20160317-_MG_1808~Copy 1	MG-1808.jpg · Portal and Light
+I0000BiadEtO0Hkw	location:usa-maine-mt-desert-island-acadia-national-park-boulder-beach	not on the new site (caption names Boulder Beach) · MG-1152.jpg · Rock Character
+I0000OBg7XOpOmnY	location:europe-iceland-jokulsarlon	not on the new site (caption names Jökulsárlón) · MG-9987-Edit.jpg · Ice and Reflection on the Black Beach - Iceland
+I00003MX.RThhz88	photo:20210513-DSC06724-Edit~	DSC06724-Edit.jpg · Peony
+I0000jZGIeWw2bXo	photo:20160805-DSC00589-Edit~	DSC00589-Edit.jpg · Sunset Moon
+I0000D7wDkR.jCVs	photo:20211018-_DSC7355-Edit~Copyright 2021	DSC7355-Edit.jpg · Flow
+I0000m4RnvvJF.aM	/	not on the new site (no match) · MG-8791.jpg · Framed Archival Fine Art Print
+I0000MQlCKcTsaS0	photo:20211018-_DSC7341~Copyright 2021	DSC7341.jpg · Cascade
+I00004vTwCVopZW4	photo:20130712-_MG_4077~	MG-4077.jpg · Paul McCartney
+I0000RfGhIweY6Go	photo:20151017-_MG_8874~	MG-8874.jpg · Yellow
+I0000qJBMUPCaG8s	photo:20150508-_MG_7414~	MG-7414.jpg · Jacob's ladder
+I0000loVTxMBq_Z8	location:california	not on the new site (caption names California) · DSC03455-Edit-3.jpg · Flow in the Woods
+I0000pEKHkq8D79w	photo:20140327-_MG_7148-Edit~	MG-7148-Edit.jpg · Stream into Loch
+I0000oRZvmSBWp9k	theme:wildlife	not on the new site (hint steenbok|elephant|yawn|penguin|weaver|toucan|reindeer|wood duck) · DSC02974.jpg · Weaver
+I0000RFe2p.pMx3g	location:usa-new-york-rochester-braddock-bay-park	not on the new site (caption names Braddock Bay Park) · MG-6976.jpg · Flash of Red
+I0000VYhvIsscK2M	theme:music	not on the new site (its old gallery) · MG-3181.jpg · Trombone Shorty
+I0000HPchNPAHcII	photo:20150508-_MG_7373~	MG-7373.jpg · Wild Geranium
+I0000h2WZMunST.w	photo:20170914-DSC05737~	DSC05737.jpg · Marsh
+I0000tFalNqKdB3g	photo:20211018-_DSC7355-Edit~Copyright 2021	DSC7355-Edit.jpg · Flow
+I0000IDJeD_D2UPk	photo:20121008-_MG_0937~	MG-0937.jpg · Yellow and Green
+I0000j5M5sdwDrUg	location:usa-delaware-bombay-hook	not on the new site (caption names Bombay Hook) · MG-7615.jpg · Delicate Tangle
+I0000vQ93Qa2bWU0	theme:wildlife	not on the new site (hint steenbok|elephant|yawn|penguin|weaver|toucan|reindeer|wood duck) · DSC04080.jpg · Steenbok
+I000067dSE5CTwl0	location:new-york-city	not on the new site (caption names New York City) · DSC05099-Edit.jpg · Urban Twilight
+I0000SBf1Em1hBh4	photo:20121011-_MG_1354~	MG-1354.jpg · Sunrise Gradient
+I0000Yue6OmDbz6k	photo:20160318-_MG_2051~Copy 2	MG-2051.jpg · Fingers in Ears
+I0000HECD.tp03Nk	photo:20130217-_MG_3051~Copy 1	MG-3051.jpg · Urban Sky - Blue
+I0000791Ov4iwbkw	photo:20111127-IMG_7953~	IMG-7953.jpg · Neon, Miami Beach, Florida
+I0000tEQSK4I5Mjg	photo:20160806-DSC00615-Edit~Copy 1	DSC00615-Edit.jpg · Sculpted
+I00005Bbs70rgbes	photo:20090628-IMG_0217~	IMG-0217.jpg · Daisy
+I0000qnK6F5qOAI0	photo:20140324-_MG_6731-Edit~Copy 1	MG-6731-Edit.jpg · Mountain Snow, Falls
+I0000rLEZMJjChLA	photo:20190818-DSC04222-Edit~	DSC04222.jpg · Colors!
+I0000QiGO4TUpU_c	theme:music	not on the new site (hint trombone shorty|concert|festival) · MG-3103.jpg · Trombone Shorty
+I0000ecLeyqGFbFw	photo:20100616-IMG_3233-Edit~	IMG-3233-Edit.jpg · Denali
+I0000usVsO2X03Uo	/themes/	not on the new site (hint eclipse|corona|diamond ring) · DSC05224-Edit.jpg · Eclipse
+I0000Zn145ZMv9Hc	theme:wildlife	not on the new site (hint steenbok|elephant|yawn|penguin|weaver|toucan|reindeer|wood duck) · DSC06326.jpg · Wood Duck
+I0000najI3RRtXd4	location:tennessee	not on the new site (hint smok(y|ies)) · MG-1991.jpg · Twists, and Color
+I0000uhW.zU04oW0	photo:20120720-_MG_9968~	MG-9968.jpg · Ice: Jökulsárlón lagoon, Iceland
+I0000cKL9ovUlJWA	photo:20170210-DSC01617-Edit~	DSC01617-Edit.jpg · Yellow
+I0000ilIeHznWToA	/	not on the new site (no match) · DSC04016-flattened.jpg · Falls
+I0000VHwz7fVRGGA	theme:wildlife	not on the new site (hint steenbok|elephant|yawn|penguin|weaver|toucan|reindeer|wood duck) · DSC04292-Edit.jpg · Yawn!
+I0000ZdE7YKP5hLI	location:usa-virginia-shenandoah-national-park	not on the new site (caption names Shenandoah National Park) · DSC04766-Edit.jpg · Rocks and Mossg
+I0000kbDgmYuUCw4	photo:20121009-_MG_1053~	MG-1053.jpg · Boulder Beach B&W 2
+I0000Cxq9bwYDIEE	photo:20130712-_MG_3771~	MG-3771.jpg · Paul McCartney
+I0000hyhNtgtqy4U	photo:20130712-_MG_3703~	MG-3703.jpg · Paul McCartney
+I0000Dto.IEk76LQ	photo:20160701-_MG_7104~	MG-7104.jpg · Mingo Fishtrap
+I0000ReLFCV8KIAA	photo:20180422-DSC07419-Edit~	DSC07419-Edit.jpg · DSC07419-Edit.jpg
+I0000b.zyURxnKDs	location:south-america-chile-patagonia-torres-del-paine-national-park	not on the new site (caption names Torres del Paine National Park) · MG-9380-Edit.jpg · Patagonian Falls
+I0000u_Fj8UijzwU	photo:20150320-_MG_0386-Edit~	MG-0386-Edit.jpg · Glacial Valley
+I0000WATCBTRYHpc	location:south-america-argentina-iguazu	not on the new site (caption names Iguazu) · MG-6682-Edit.jpg · Tree Babies
+I0000h14diZSoiPg	photo:20150322-_MG_6074-Edit~Copy 1	MG-6074-Edit.jpg · La Boca Portal
+I0000FBx9xiFPpgI	/	not on the new site (no match) · MG-6920.jpg · _MG_6920.jpg
+I0000_BxYVCncHDo	photo:20180421-DSC07407-Edit~	DSC07407-Edit.jpg · DSC07407-Edit.jpg
+I0000LabQ2juYC3Q	photo:20180425-DSC07862-Edit~	DSC07862-Edit.jpg · Dunes
+I0000RGpcnciKnKA	photo:20180424-DSC07776-Edit-2~	DSC07776-Edit-2.jpg · Pumice
+I0000tpJZuUG7Zxc	photo:20180425-DSC07812~	DSC07812.jpg · Sand
+I0000mrqDsJDUUr0	photo:20180425-DSC07855-Edit-3~	DSC07855-Edit-3.jpg · Waves of Sand
+I0000ZKKCTv5wdHk	photo:20190423-DSC01349-Edit~Copyright 2019	DSC01349-Edit.jpg · First Light
+I0000ffftm2ixS3M	photo:20190422-DSC01266-2-Edit~Copy 2	DSC01266-2-Edit.jpg · Curve
+I0000xU7nRdlLP6Y	photo:20190424-DSC01398-2-2-Edit~	DSC01398-2-2-Edit.jpg · Curve
+I0000x2Q3fLb.iz0	photo:20190425-DSC01459-Edit~	DSC01459-Edit.jpg · Above the Fog
+I0000FaMr6DRauoY	photo:20190423-DSC01385-Edit-2~	DSC01385-Edit-2.jpg · Green Waters
+I0000_mQM5uN0Bzw	photo:20190425-DSC01496-Edit-2~	DSC01496-Edit-2.jpg · Three Trees
+I0000QznFI9tyX9w	photo:20190425-DSC01729-Edit~Copy 1	DSC01729-Edit.jpg · Counterpoint
+I0000ZKPPk0sGzDA	photo:20190426-DSC01752-Edit~	DSC01752-Edit.jpg · First Light
+I0000M1P09bCrpMw	location:south-america-chile-patagonia-torres-del-paine-national-park	not on the new site (caption names Torres del Paine National Park) · DSC01918-Edit.jpg · Shrouded
+I0000NMCnjMPbhaM	photo:20160315-_MG_1351~	MG-1351.jpg · The Fez Medina
+I0000L.rWDuO_sQs	photo:20160316-_MG_1571-Edit~	MG-1571-Edit.jpg · Running
+I0000IUvBkF7dA7g	photo:20150607-_MG_7732~Copy 1	MG-7732.jpg · From the Tram
+I000028p6iF.iVwE	photo:20160315-_MG_1502-Edit~	MG-1502-Edit.jpg · Weaver
+I000068RTQOM0qQc	photo:20150606-_MG_7625-Edit~	MG-7625-Edit.jpg · Manhattan Skyline
+I0000ydfR6JokUlc	theme:wildlife	not on the new site (hint steenbok|elephant|yawn|penguin|weaver|toucan|reindeer|wood duck) · MG-6784.jpg · Toucan
+I0000aKqs6hraleU	photo:20130629-_MG_3140~	MG-3140.jpg · Trombone Shorty
+I0000h82K1bFdP2Q	photo:20120719-_MG_9701 (2)~	MG-9701-2.jpg · Puffin, Iceland
+I0000LadexQ0znPM	/	not on the new site (no match) · DSC06670-Edit.jpg · DSC06670-Edit.jpg
+I0000J0d7Meqemx4	photo:20100824-IMG_5057-Edit~	IMG-5057-Edit.jpg · An Intense Gaze
+I00006IDIeYN.Vzo	photo:20160806-DSC00631-Edit~	DSC00631-Edit.jpg · Little Peninsula
+I0000_tdTq21vBmU	/	not on the new site (no match) · DSC00933.jpg · DSC00933.jpg
+I0000GLZFOQTCBeY	photo:20111127-IMG_7927~	IMG-7927.jpg · Neon Twilight, Miami Beach, Florida
+I00008hhYDq182Hw	location:usa-new-york-adirondacks	not on the new site (caption names Adirondacks) · DSC7360-Edit.jpg · Flow and Rock
+I0000liiYFZgCkqw	/	not on the new site (no match) · IMG-6209.jpg · Rounding the Corner
+I0000o_GYzgS2E6U	theme:wildlife	not on the new site (hint steenbok|elephant|yawn|penguin|weaver|toucan|reindeer|wood duck) · MG-0770.jpg · Reindeer
+I0000viN4uniZdg8	photo:20120719-_MG_9716~Copy 1	MG-9716.jpg · Basalt and Sea Stack - Iceland
+I0000wifh6_2Zt34	photo:20190629-DSC02550~	DSC02550.jpg · Cha Wa
+I0000sNT5YWTC4PY	location:iceland	not on the new site (caption names Iceland) · DSC04101.jpg · Falls
+I0000FMJC6scRIFY	photo:20130629-_MG_2963~	MG-2963.jpg · Mingo Fishtrap
+I0000voqVo3nqzuU	photo:20100610-IMG_2202-Edit~	IMG-2202-Edit.jpg · Cliff Walker
+I00001JU.Gjtmc4g	photo:20130901-_MG_5474-Edit_no_border~	MG-5474-Edit-no-border.jpg · Edingurgh Fireworks
+I0000SX3WkUGr1.o	photo:20130910-_MG_5874-Edit_no border~Copy 1	MG-5874-Edit-no-border.jpg · Isle Cliffs
+I000031zQyrU8jcs	photo:20130909-_MG_5789-Edit-Edit~	MG-5789-Edit-Edit.jpg · Blustery Skies
+I0000tfAkv1mx5gE	photo:20130908-_MG_5772-Edit~	MG-5772-Edit.jpg · Flow
+I0000cZJt0fPj_2E	photo:20130906-_MG_5715-Edit-Edit~	MG-5715-Edit-Edit.jpg · Gnarled
+I0000jlwi5CRObnk	photo:20130904-_MG_5546-Edit-Edit~	MG-5546-Edit-Edit.jpg · Drops and Cascades
+I0000y5py2IHC0k4	photo:20130904-_MG_5531-Edit~	MG-5531-Edit.jpg · Cascades
+I0000Qvjvft0LXCc	photo:20130904-_MG_5529-Edit~	MG-5529-Edit.jpg · Forth Bridge
+I0000zFC90BJ.gY8	photo:20130901-_MG_5429-Edit~	MG-5429-Edit.jpg · _MG_5429-Edit.jpg
+I00008Hr2TszZcjY	photo:20201001-DSC05681~Copyright 2020	DSC05681.jpg · Stream
+I0000tJwQJTqeYSM	photo:20150326-_MG_7144-Edit~	MG-7144-Edit.jpg · Iguazu
+I0000LA55SWSfgAM	location:iceland	not on the new site (caption names Iceland) · IMG-9335.jpg · A Big Falls in the Rain
+I0000Pb92fQYqfqA	/	not on the new site (no match) · DSC00889-Edit.jpg · DSC00889-Edit.jpg
+I0000mvDhEkxmsOw	photo:20121027-_MG_2238~	MG-2238.jpg · Golden Trees
+I0000d2C3UaWmu4o	photo:20221003-_DSC9192-Edit~Copyright 2022	DSC9192-Edit.jpg · Reeds
+I00008R8w82rnJWE	photo:20170916-DSC05747~Copyright 2017	DSC05747.jpg · Marsh
+I00001DQvSHGn7xg	photo:20191227-DSC04980-Edit~	DSC04980-Edit.jpg · Pothole
+I0000.BiZ31C9YlI	photo:20150325-_MG_6592-Edit~	MG-6592-Edit.jpg · Iguazu Drop
+I00000DE64iA8P.o	photo:20080330-IMG_6182-Edit~	IMG-6182-Edit.jpg · Fountain of the Gods
+I00000TRXMlTHtSM	location:usa-north-carolina	not on the new site (caption names North Carolina) · DSC04699-Edit-2.jpg · Wild Horses
+I00000pxvfwiHNgk	/themes/	not on the new site (hint eclipse|corona|diamond ring) · DSC05257-Edit.jpg · "Diamond Ring"
+I0000M8pezakx6Gc	photo:20210415-DSC06398-Edit-IGFG-Soft_Proof~Copyright 2021	DSC06398-Edit-IGFG-Soft-Proof.jpg · Redbud
+I0000BDVZSMXNh7c	photo:20150104-DSCF0200-Edit~	DSCF0200-Edit.jpg · Lightpost
+I0000ZfZ4iopAltQ	photo:20130916-_MG_6209-Edit_no_border~	MG-6209-Edit-no-border.jpg · Glasgow Cathedral
+I0000q7bb3Vf2yPI	photo:20140325-_MG_6871-Edit-2-Edit~	MG-6871-Edit-2-Edit.jpg · Holding on, Resolutely
+I0000vx8vN.FQC5o	photo:20130217-_MG_3051-Edit-2~	MG-3051-Edit-2.jpg · Urban Sky
+I0000b3otV_Zh7yA	photo:20121009-_MG_1164~	MG-1164.jpg · Twist
+I00003KV1yAlbFcI	photo:20121009-_MG_1083~	MG-1083.jpg · Boulder Beach B&W 3
+I0000I6bBYxR08wU	photo:20161026-DSC01193-Edit-2~	DSC01193-Edit-2.jpg · To the Sea
+I00001WJBrLYeHz4	photo:20170608-DSC03505~Copy 1	DSC03505.jpg · Trail View
+I0000h_tnkgQkJZA	theme:music	not on the new site (hint trombone shorty|concert|festival) · MG-3215.jpg · Trombone Shorty
+I0000uBTlTBgjQTk	photo:20220801-_DSC8590-Edit~	DSC8590-Edit.jpg · Rapids
+I0000i90th7k8Gl4	photo:20221011-_DSC9758~Copyright 2022	DSC9758.jpg · Handholds
+I0000KMmtoxJPD2s	photo:20140913-_MG_8500-Edit~	MG-8500-Edit.jpg · Flow; Splash!
+I0000rqxvWEALLbA	photo:20121013-_MG_1772~	MG-1772.jpg · Yellow
+I00000LjpsA.rP4Y	photo:20221013-_DSC0009~Copyright 2022	DSC0009.jpg · Rocks and Reeds
+I0000UmGsw2MmcTs	photo:20140328-_MG_7217-Edit-2~	MG-7217-Edit-2.jpg · Rocks, Trees
+I0000XeBNwGW5Gjw	photo:20130514-_MG_4598~	MG-4598.jpg · Garrapata Beach Sunset
+I0000nNYt9DCD_Uc	theme:wildlife	not on the new site (hint steenbok|elephant|yawn|penguin|weaver|toucan|reindeer|wood duck) · DSC02842-Edit-2.jpg · African penguins at Boulders Beach, Cape Town, S
+I0000bgH7pZ9PCZg	photo:20140425-_MG_7349-Edit~	MG-7349-Edit.jpg · Revealing the Potomac
+I0000ABFdgFDPV_U	location:tennessee	not on the new site (hint smok(y|ies)) · IMG-5303.jpg · Abstraction in the Smokies
+I0000HHSUv8G9HSk	location:tennessee	not on the new site (hint smok(y|ies)) · IMG-5275.jpg · Abstraction in the Smokies
+I0000syl84eRrGac	location:tennessee	not on the new site (hint smok(y|ies)) · IMG-6088-Edit.jpg · Smoky Mountains Falls
+I0000CmhVNk6iTlU	photo:20170622-DSC03811~	DSC03811.jpg · Contrasts
+I0000duNJwICE1BY	photo:20161027-DSC01275-Edit~Copyright 2016	DSC01275-Edit.jpg · Distant Clouds
+I0000c2Wysb0g_pc	photo:20170628-DSC04500~Copyright 2017	DSC04500.jpg · Ice
+I0000W4ioBIBvx7A	photo:20260123-DSC07077~	DSC07077.jpg · Looking North
+I0000iljVpqtlsyI	photo:20150606-_MG_7585-Edit~	MG-7585-Edit.jpg · Flatiron
+I0000_FOkSYzMoDs	photo:20160318-_MG_1922-Edit~	MG-1922-Edit.jpg · Hassan II Mosque
+I00007h9rxZ6cU8M	location:south-america-argentina-iguazu	not on the new site (caption names Iguazu) · MG-7078.jpg · Yellow!
+I0000Z5ccLVcdS1A	photo:20170323-DSC02433~	DSC02433.jpg · DSC02433.jpg
+I0000UOSpEU7bD8c	photo:20150729-_MG_8247-Edit~Copy 1	MG-8247-Edit.jpg · Storm Light
+I0000q9CRC5q446A	photo:20130514-_MG_4622-Edit~	MG-4622-Edit.jpg · Bixby Bridge at Night
+I0000cfWpBqOkbF8	photo:20100521-IMG_1439~	IMG-1439.jpg · Yellow on Blue
+I0000ny7nuTs9KPE	photo:20190421-DSC01211-Edit~	DSC01211-Edit.jpg · Echos
+I0000PGyaaCGufy8	photo:20160313-_MG_1129~	MG-1129.jpg · Blue Stairs
+I0000lN.YcUG4utY	photo:20071129-IMG_5985~	IMG-5985.jpg · California Wave
+I0000SP_nugtvxy8	/	not on the new site (no match) · MG-5967-Edit-Edit.jpg · Water through Rock
+I0000px9st9_oVYo	photo:20140325-_MG_6893-Edit~	MG-6893-Edit.jpg · Contrasts
+I0000REt.jN6_v6M	photo:20130910-_MG_5865~	MG-5865.jpg · Scottish Shore
+I0000cmF0M_DiYPk	/themes/	not on the new site (hint eclipse|corona|diamond ring) · DSC05242-Edit-2.jpg · Corona
+I00005Owe_7K25BE	photo:20101128-IMG_6287~	IMG-6287.jpg · Snow Geese
+I0000M4uTLOf6hp4	photo:20200412-DSC05227~Copyright 2020	DSC05227.jpg · Fern
+I0000iJbrXmcY1Lk	photo:20121203-_MG_2873~	MG-2873.jpg · Glancing Back
+I00000ZnOZyxwmUs	location:usa-virginia-great-falls	not on the new site (its old gallery) · MG-4741.jpg · Small Falls, Green
+I0000UoflEQhbvvQ	location:iceland	not on the new site (its old gallery) · IMG-9463.jpg · Brúarárfoss, Iceland
+I0000HNSeUG7PLtM	/	not on the new site (no match) · MG-8719.jpg · Decay, and Light
+I0000gXlvE88WA0I	photo:20190809-DSC03012-Edit~	DSC03012-Edit.jpg · Baobab
+I0000aEAO0I.nqAk	photo:20170919-DSC06053~	DSC06053.jpg · Barnacles
+I0000XFS8Ip.1myM	photo:20160805-DSC00577-Edit~Copy 1	DSC00577-Edit.jpg · Sculpted
+I0000W4LGvUYzMzs	theme:wildlife	not on the new site (hint steenbok|elephant|yawn|penguin|weaver|toucan|reindeer|wood duck) · DSC03516-Edit.jpg · Crossing
+I0000Nb6ZCUZiGxQ	photo:20190818-DSC04222-Edit~	DSC04222-Edit.jpg · Feather Detail
+I0000fSZpyQ8Z9vs	photo:20190822-DSC04542~	DSC04542.jpg · LIons
+I00008TisYBf9URs	photo:20190822-DSC04544-Edit~	DSC04544-Edit.jpg · Ten Lions
+I0000LCgtIl3Nsv4	theme:music	not on the new site (hint trombone shorty|concert|festival) · MG-3303.jpg · Trombone Shorty
+I0000RUQ8BNuJFJU	photo:20121012-_MG_1664~	MG-1664.jpg · Witch Hole Pond
+I0000E81LpePfRwA	location:tennessee	not on the new site (hint smok(y|ies)) · IMG-5485-Edit.jpg · Smoky Mountains Stream
+I0000Z4oHzZSMTTc	photo:20130914-_MG_6144-Edit~	MG-6144-Edit.jpg · Glencoe Dawn
+I0000E1kyLIpWy30	photo:20180425-DSC07826-Edit~	DSC07826-Edit.jpg · Sand
+I0000PUHcQXitsiQ	photo:20121010-_MG_1214~	MG-1214.jpg · Red
+I0000ls7l6go3Gsc	photo:20160317-_MG_1778-Edit~	MG-1778-Edit.jpg · Door
