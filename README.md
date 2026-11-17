@@ -158,6 +158,10 @@ lines for things worth knowing (a collection that needs republishing).
   use any image editor.
 - **Favicons:** `static/favicon.svg`, `static/root/favicon.ico` and
   `static/root/apple-touch-icon.png`.
+- **Link previews:** `static/img/share.jpg` (1200×630, sRGB, no GPS) is the
+  image shown when a page is shared on social media or in messages; a photo's
+  own page previews that photo instead. Without the file, the home page
+  previews its hero photo.
 - **About and Contact:** Markdown files in `content/`. About appears in the
   menu and Contact in the footer; any other `.md` file there becomes a page at
   `/<name>/` that you can link to. `menu_pages` in `site.yaml` picks which go
@@ -210,6 +214,13 @@ Optional text for one day, shown under "Friday, January 23 · North Cape".
   in one region, a few days apart), with `dates:` and `place:` lines ready to
   copy, and marks the ones that already have a page.
 - Each photo's page links to the trips it's in.
+- Trip photos are shown larger than in galleries (rows about 590px tall,
+  340px on phones, never taller than 70% of the window), with each photo's
+  Lightroom title underneath. The layout suits one to three chosen photos a
+  day; for many snapshots, a blog post is the better home. Row heights:
+  `--row-h` under `.trip-day .grid` in `site.css`, kept in step with
+  `TRIP_ROW_H_*` in `photosite/render.py`.
+- A map: paste Google Maps' embed `<iframe>` into the text (see *Maps* above).
 
 ## Contact form
 
