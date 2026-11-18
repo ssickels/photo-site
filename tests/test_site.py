@@ -293,6 +293,8 @@ def test_travels(site, server):
     assert page.count('class="grid"') == 2                       # one per day: Sep 2, Sep 5
     assert "Saturday, September 2" in page and "Tuesday, September 5" in page
     assert "20230904-dsc05620" not in page                       # excluded
+    og = page.split('property="og:image" content="')[1].split('"')[0]
+    assert "/img/2023" in og and "share" not in og                # the trip's cover, not the site image
     photo = (out / "travels" / "2023-09-scotland" / "20230905-dsc05700" / "index.html").read_text()
     assert re.search(r"Skye and Raasay</a> · 2 of 2", photo)
     theme_photo = next(out.glob("*/20230902-dsc05501/index.html")).read_text()

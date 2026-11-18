@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% from "_macros.html" import picture, ph %}
+{# Link previews show the trip's cover (cover: in the front matter, else its first photo) #}
+{% block og_image %}{% if trip.cover %}<meta property="og:image" content="{{ img(trip.cover, '100vw').og }}">{% else %}{{ super() }}{% endif %}{% endblock %}
 {% block main %}
 <header class="gallery-header trip-header">
   <p class="context crumbs"><a href="/travels/">Travels</a></p>
