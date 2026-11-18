@@ -95,7 +95,7 @@ h1, h2, h3 { font-weight: 500; line-height: 1.25; }
 .site-header nav a { text-decoration: none; color: var(--muted); font-size: 0.95rem; }
 .site-header nav a:hover, .site-header nav a[aria-current] { color: var(--fg); }
 .site-footer {
-  display: flex; gap: 1.5rem; justify-content: center;
+  display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; justify-content: center;
   padding: 2.5rem var(--gutter) 2rem; color: var(--muted); font-size: var(--small);
 }
 .site-footer a { color: inherit; }

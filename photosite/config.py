@@ -122,6 +122,7 @@ def load_config(path: str | os.PathLike = "site.yaml", *, publish=None,
     labels = {str(k).lower(): str(v) for k, v in (data.get("location_labels") or {}).items()}
 
     contact = _load_contact(root, data.get("contact") or {})
+    deploy = _load_deploy(root, data)
 
     return Config(
         root=root,
@@ -137,11 +138,45 @@ def load_config(path: str | os.PathLike = "site.yaml", *, publish=None,
         location_labels=labels,
         location_tree=bool(data.get("location_tree", False)),
         images=images,
-        deploy=data.get("deploy") or {},
+        deploy=deploy,
         content_dir=_resolve(root, paths.get("content", "content")),
         contact=contact,
         menu_pages=[str(p) for p in (data.get("menu_pages") or ["about"])],
     )
+
+
+PRIVATE_DEPLOY_KEYS = ("host", "user", "port")
+
+
+def _private_file(root: Path, data: dict) -> Path:
+    return _resolve(root, (data.get("contact") or {}).get("private_file") or "site.local.yaml")
+
+
+def _load_deploy(root: Path, data: dict) -> dict:
+    """deploy: from site.yaml, with each target's server name and FTP account
+    (host, user, port) taken from the private file, so a public repo doesn't
+    show them. Passwords live in ~/.netrc, never in either file."""
+    deploy = dict(data.get("deploy") or {})
+    path = _private_file(root, data)
+    private = {}
+    if path.exists():
+        private = (yaml.safe_load(path.read_text()) or {}).get("deploy") or {}
+        if not isinstance(private, dict):
+            raise ConfigError(f"`deploy` in {path} must be a mapping")
+    for target, extra in private.items():
+        if not isinstance(extra, dict):
+            raise ConfigError(f"deploy.{target} in {path} must be a mapping")
+        if extra.get("password"):
+            raise ConfigError("never put a password in a settings file; run ./build.py "
+                              f"credentials {target}")
+        unknown = set(extra) - set(PRIVATE_DEPLOY_KEYS)
+        if unknown:
+            raise ConfigError(f"deploy.{target} in {path} may only set "
+                              f"{', '.join(PRIVATE_DEPLOY_KEYS)}, not {', '.join(sorted(unknown))}")
+        t = dict(deploy.get(target) or {})
+        t.update({k: v for k, v in extra.items() if v is not None})
+        deploy[target] = t
+    return deploy
 
 
 def _load_contact(root: Path, public: dict) -> ContactSettings:

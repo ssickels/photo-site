@@ -11,6 +11,8 @@ It was written to replace a PhotoShelter site ([stevesickels.com](https://steves
 and should suit anyone leaving PhotoShelter, SmugMug, Squarespace, Wix or
 similar who already keeps their work organized in Lightroom.
 
+![The home page of stevesickels.com, built with this software](docs/screenshot.jpg)
+
 **What you get**
 
 - **Themes:** one gallery per Lightroom publish collection (Landscapes,
@@ -353,7 +355,15 @@ PHP is tested too when `php` is installed).
 over FTPS with `lftp mirror --reverse --delete --only-newer`: only changed
 files go up, and files no longer in the build are removed from the server.
 Add `--dry-run` to only list what would change. Settings are under `deploy:`
-in `site.yaml` (host, FTP account, folder; rsync over SSH is an option).
+in `site.yaml` (address, folder; rsync over SSH is an option). Each target's
+server name and FTP account are private, in `site.local.yaml`:
+
+```yaml
+deploy:
+  production:
+    host: ftp.example.com
+    user: deploy@example.com
+```
 
 - The FTP password is stored once with `./build.py credentials production`,
   in `~/.netrc` (readable only by you), never in the repo.

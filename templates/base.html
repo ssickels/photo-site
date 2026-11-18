@@ -55,6 +55,7 @@
 <footer class="site-footer">
   <span>© {{ site.author | default(site.title) }}</span>
   <a href="/contact/">Contact</a>
+  {% if site.get('source_url') %}<a href="{{ site.source_url }}">How this site is built</a>{% endif %}
 </footer>
 {% endblock %}
 {% block scripts %}{% endblock %}

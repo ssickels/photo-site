@@ -6,6 +6,7 @@ site:
   author: Steve Sickels
   base_url: https://stevesickels.com          # production; staging overrides below
   blog_url: https://stevesickelsphotography.com
+  source_url: https://github.com/ssickels/photo-site   # footer: "How this site is built"
   # Used in derivative files when a photo has no copyright of its own.
   default_copyright: "© Steve Sickels. All rights reserved."
 
@@ -124,21 +125,19 @@ images:
 
 # ---------------------------------------------------------------- deploy
 # method: ftps (lftp mirror --reverse --delete) or rsync (over SSH).
-# Credentials come from ~/.netrc (chmod 600) or env vars, never from here:
-#   PHOTOSITE_<TARGET>_USER / PHOTOSITE_<TARGET>_PASSWORD
+# The server name and FTP account of each target (host, user) are private, in
+# site.local.yaml (gitignored) under deploy: <target>:. Passwords come from
+# ~/.netrc (chmod 600, ./build.py credentials <target>) or env vars, never from
+# either file:  PHOTOSITE_<TARGET>_USER / PHOTOSITE_<TARGET>_PASSWORD
 deploy:
   method: ftps
   staging:
     base_url: https://new.stevesickels.com
-    host: belle.tchmachines.com
-    user: deploy@new.stevesickels.com  # cPanel FTP account; password in ~/.netrc
     remote_dir: /          # FTP account's home = the staging docroot
     noindex: true
   production:
     base_url: https://stevesickels.com
-    host: belle.tchmachines.com
-    user: deploy@stevesickels.com      # cPanel FTP account (home: public_html); password in ~/.netrc
-    remote_dir: /
+    remote_dir: /          # FTP account's home = public_html
     noindex: false
     # Folders or files in this docroot that a deploy never uploads over or
     # deletes: staging's docroot (public_html/new.stevesickels.com) and

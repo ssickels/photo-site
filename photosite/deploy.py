@@ -44,7 +44,8 @@ def settings(config: Config, target: str) -> dict:
         raise ConfigError(f"deploy.method must be ftps or rsync, not {method!r}")
     for key in ("host", "user"):
         if not t.get(key):
-            raise ConfigError(f"deploy.{target}.{key} is missing in site.yaml")
+            raise ConfigError(f"deploy.{target}.{key} is missing: put it in site.local.yaml "
+                              f"under deploy: {target}:")
     if t.get("password"):
         raise ConfigError("never put a password in site.yaml; run ./build.py credentials "
                           f"{target}")

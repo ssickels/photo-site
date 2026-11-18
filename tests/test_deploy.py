@@ -93,3 +93,19 @@ def test_keep_protects_other_sites_folders(config):
     config.deploy["production"]["keep"] = "new.example.test"
     with pytest.raises(ConfigError, match="keep"):
         deploy.settings(config, "production")
+
+
+def test_server_and_account_can_live_in_the_private_file(tmp_path):
+    from photosite.config import load_config
+    (tmp_path / "site.yaml").write_text(
+        "site: {title: T, base_url: 'https://example.com'}\n"
+        "deploy:\n  production: {base_url: 'https://example.com', remote_dir: /}\n")
+    with pytest.raises(ConfigError, match="site.local.yaml"):
+        deploy.settings(load_config(tmp_path / "site.yaml"), "production")
+    (tmp_path / "site.local.yaml").write_text(
+        "deploy:\n  production: {host: ftp.example.com, user: me@example.com}\n")
+    s = deploy.settings(load_config(tmp_path / "site.yaml"), "production")
+    assert (s["host"], s["user"], s["remote_dir"]) == ("ftp.example.com", "me@example.com", "/")
+    (tmp_path / "site.local.yaml").write_text("deploy:\n  production: {password: x}\n")
+    with pytest.raises(ConfigError, match="password"):
+        load_config(tmp_path / "site.yaml")
