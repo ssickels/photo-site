@@ -7,9 +7,10 @@ database, no CMS, no monthly portfolio-service fee, and no third-party requests
 (no fonts, analytics or CDNs; the one optional exception is a captcha on the
 contact form).
 
-It was written to replace a PhotoShelter site ([stevesickels.com](https://stevesickels.com)),
-and should suit anyone leaving PhotoShelter, SmugMug, Squarespace, Wix or
-similar who already keeps their work organized in Lightroom.
+It runs [stevesickels.com](https://stevesickels.com), which moved off
+PhotoShelter to this software in 2026, and should suit anyone leaving
+PhotoShelter, SmugMug, Squarespace, Wix or similar who already keeps their work
+organized in Lightroom.
 
 ![The home page of stevesickels.com, built with this software](docs/screenshot.jpg)
 
