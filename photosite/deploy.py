@@ -172,6 +172,12 @@ def _session(s: dict, password: str) -> str:
         "set net:timeout 30",
         "set net:max-retries 3",
         "set net:reconnect-interval-base 5",
+        # Upload each file as .in.<name>. and rename it when complete, so an
+        # interrupted deploy (Ctrl-C, dropped connection) never leaves a
+        # half-written page or image under its real name; the next deploy's
+        # --delete removes any leftover temp file.
+        "set xfer:use-temp-file yes",
+        "set xfer:temp-file-name .in.*",
         # The password reaches lftp in LFTP_PASSWORD (see _lftp), so no
         # character in it can be misread by lftp's command parser.
         f"open --env-password -u {_q(s['user'])} ftp://{s['host']}{port}",
