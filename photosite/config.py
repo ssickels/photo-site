@@ -108,6 +108,9 @@ def load_config(path: str | os.PathLike = "site.yaml", *, publish=None,
             galleries[i] = {"node": g}
         elif not isinstance(g, dict) or not g.get("node"):
             raise ConfigError(f"location_galleries[{i}] needs a `node`")
+        elif not isinstance(g["node"], str):
+            raise ConfigError(f"location_galleries[{i}]: the braces are misplaced; write "
+                              "- {node: a|b, name: \"...\"}, not - node: {a|b, name: ...}")
 
     img = data.get("images") or {}
     known = set(ImageSettings.__dataclass_fields__)

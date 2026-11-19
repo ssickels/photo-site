@@ -65,6 +65,7 @@ location_galleries:
   - node: usa|delaware
   - node: europe
   - node: usa|florida
+  - {node: usa|virginia|our garden, name: "Our Garden, Virginia", cover: 20150509-mg-7488}
   - node: europe|iceland
   - node: europe|italy
   - node: usa|maine
